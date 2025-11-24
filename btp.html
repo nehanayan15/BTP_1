@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<!-- 
+  Project: Raising Strong Daughters
+  Purpose: B.Tech Project (IIT Guwahati) on Digital Platforms for Gender Awareness in Assam
+  Guide: Prof. Rituparna Patgiri, Dept. of HSS, IIT Guwahati
+  
+  This is a single-file HTML, CSS (Tailwind), and JavaScript application.
+  All content, styling, and logic are contained within this file.
+-->
+<html lang="as">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang-key="title">Raising Strong Daughters | সবল কন্যা গঢ়ি তোলা</title>
+
+    <!-- 1. Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 2. Google Fonts: Inter (for English) and Noto Sans Assamese (for Assamese) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+Assamese:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- 3. Custom Styles and Tailwind Configuration -->
+    <style>
+        /* We define custom font families based on the imported Google Fonts.
+          Tailwind's 'sans' will be Inter, and 'assamese' will be Noto Sans Assamese.
+        */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'assamese': ['Noto Sans Assamese', 'sans-serif']
+                    },
+                    colors: {
+                        'brand-purple': '#7E22CE', /* New main accent color */
+                        'brand-pink': '#FDF2F8',   /* New main background */
+                        'brand-dark': '#312E81',  /* New main text color */
+                        'brand-light-purple': '#E9D5FF' /* New light accent */
+                    }
+                }
+            }
+        }
+
+        /* This is the core logic for language-specific font application.
+          When <html> has lang="as", the body (and all children) will default to the Assamese font.
+          When <html> has lang="en", it defaults to the 'sans' (Inter) font.
+        */
+        html[lang="as"] body {
+            font-family: 'Noto Sans Assamese', 'Inter', sans-serif;
+            color: #312E81; /* brand-dark */
+        }
+        html[lang="en"] body {
+            font-family: 'Inter', 'Noto Sans Assamese', 'sans-serif;
+            color: #312E81; /* brand-dark */
+        }
+
+        /* Custom class for the active navigation link.
+          The 'nav-link' class is for targeting, and 'nav-link-active' is the state.
+        */
+        .nav-link-active {
+            font-weight: 700;
+            color: #7E22CE; /* brand-purple */
+            border-bottom: 2px solid #7E22CE;
+        }
+
+        /* Simple accordion animation */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        /* --- New Marquee Styles --- */
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            background-color: #E9D5FF; /* brand-light-purple */
+            color: #312E81; /* brand-dark */
+            padding: 8px 0;
+            box-sizing: border-box;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+        }
+
+        @keyframes marquee {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* --- New Highlight for Translate Button --- */
+        /* We use Tailwind's animation classes but define the keyframes */
+        @keyframes pulse-glow {
+            50% {
+                box-shadow: 0 0 0 4px rgba(126, 34, 206, 0.3); /* brand-purple with opacity */
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+    </style>
+</head>
+
+<body class="bg-brand-pink text-brand-dark antialiased">
+
+    <!-- =========== HEADER / NAVIGATION =========== -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <!-- Website Title -->
+            <div class="text-xl md:text-2xl font-bold text-brand-purple">
+                <span data-lang-key="nav_title">সবল কন্যা গঢ়ি তোলা</span>
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="text-sm font-medium order-2 md:order-3">
+                <button id="lang-toggle-btn" class="bg-brand-purple text-black px-3 py-1 rounded-full hover:bg-purple-700 hover:text-white transition-colors animate-pulse-glow shadow-md">
+                    Translate
+                </button>
+            </div>
+
+
+            <!-- Navigation Links -->
+            <div class="w-full md:w-auto order-3 md:order-2 mt-3 md:mt-0">
+                <ul class="flex flex-col md:flex-row md:space-x-6 text-center text-gray-600">
+                    <li><a href="#home" class="nav-link block py-2 md:py-1" data-lang-key="nav_home">Home</a></li>
+                    <li><a href="#about" class="nav-link block py-2 md:py-1" data-lang-key="nav_about">About</a></li>
+                    <li><a href="#learning" class="nav-link block py-2 md:py-1" data-lang-key="nav_learning">Learning</a></li>
+                    <li><a href="#stories" class="nav-link block py-2 md:py-1" data-lang-key="nav_stories">Stories</a></li>
+                    <li><a href="#resources" class="nav-link block py-2 md:py-1" data-lang-key="nav_resources">Resources</a></li>
+                    <li><a href="#interactive" class="nav-link block py-2 md:py-1" data-lang-key="nav_interactive">Interactive</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- =========== MOVING TEXT MARQUEE =========== -->
+    <div class="marquee">
+        <div class="marquee-content">
+            <span class="mx-4" data-lang-key="marquee_welcome">"সবল কন্যা গঢ়ি তোলা" ৱেবছাইটলৈ আপোনাক স্বাগতম।</span>
+            <span class="mx-4" data-lang-key="marquee_welcome_en">Welcome to the "Raising Strong Daughters" website.</span>
+            <span class="mx-4" data-lang-key="marquee_welcome">"সবল কন্যা গঢ়ি তোলা" ৱেবছাইটলৈ আপোনাক স্বাগতম।</span>
+            <span class="mx-4" data-lang-key="marquee_welcome_en">Welcome to the "Raising Strong Daughters" website.</span>
+        </div>
+    </div>
+
+    <!-- =========== MAIN CONTENT AREA =========== -->
+    <!-- All sections are wrapped in <main> -->
+    <main class="container mx-auto p-4 md:p-6">
+
+        <!-- 
+          Page content will be dynamically shown/hidden by JavaScript.
+          Only one <section> will be visible at a time.
+        -->
+
+        <!-- =========== 1. HOME SECTION =========== -->
+        <section id="home" class="page-section">
+            <!-- Hero Section -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="md:flex">
+                    <!-- Text Content -->
+                    <div class="p-6 md:p-8 md:w-1/2 flex flex-col justify-center">
+                        <h1 class="text-3xl md:text-4xl font-bold text-brand-purple mb-4" data-lang-key="hero_title">
+                            নাৰী শক্তিৰে অসমৰ নৱনিৰ্মাণ
+                        </h1>
+                        <p class="text-lg text-gray-700 mb-6" data-lang-key="hero_subtitle">
+                            এক সমতাপূৰ্ণ আৰু উজ্জ্বল ভৱিষ্যতৰ বাবে আগবাঢ়ি আহক। জ্ঞান, কাহিনী আৰু সমাজৰ সহযোগত আমি এনে এক ডিজিটেল মঞ্চ গঢ়ি তুলিছোঁ, য’ত অসমৰ প্ৰতিগৰাকী নাৰীয়ে স্বাভিমানৰ সপোন দেখিব পাৰে।
+                        </p>
+                        <!-- Updated Button: Changed bg-brand-purple to bg-violet-700 and hover color -->
+                        <a href="#learning" class="nav-link-direct bg-violet-700 text-white px-8 py-4 rounded-full shadow-lg hover:shadow-xl hover:bg-violet-800 transition-all transform hover:-translate-y-1 self-start inline-flex items-center group">
+                            <span data-lang-key="hero_cta" class="font-extrabold text-xl tracking-wide">আৰম্ভ কৰক</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                    <!-- Image Grid -->
+                    <div class="md:w-1/2 grid grid-cols-2 gap-4 p-4">
+                        <!-- Image 1: Bhogeswari Phukanani (User Uploaded) -->
+                        <div class="flex flex-col gap-2">
+                            <!-- NOTE: Ensure 'images.jpeg' is in the same folder as this index.html file -->
+                            <img src="images.jpeg" alt="Bhogeswari Phukanani" class="rounded-lg shadow-md object-cover w-full h-48 md:h-64 flex-grow" onerror="this.onerror=null; this.src='https://placehold.co/400x600/E9D5FF/312E81?text=Image+Not+Found';">
+                            <button id="btn-bhogeswari" class="w-full h-12 md:h-14 bg-violet-700 text-white px-3 py-2 rounded-lg font-bold text-sm md:text-base hover:bg-violet-800 transition-colors shadow-sm flex items-center justify-center">
+                                Bhogeswari Phukanani
+                            </button>
+                        </div>
+                        <!-- Image 2: Kanaklata Barua (User Uploaded) -->
+                        <div class="flex flex-col gap-2">
+                            <!-- NOTE: Ensure 'Kanaklata Barua.jpg' is in the same folder as this index.html file -->
+                            <img src="image.png" alt="Kanaklata Barua" class="rounded-lg shadow-md object-cover w-full h-48 md:h-64 flex-grow" onerror="this.onerror=null; this.src='https://placehold.co/400x600/E9D5FF/312E81?text=Image+Not+Found';">
+                            <button id="btn-kanaklata" class="w-full h-12 md:h-14 bg-violet-700 text-white px-3 py-2 rounded-lg font-bold text-sm md:text-base hover:bg-violet-800 transition-colors shadow-sm flex items-center justify-center">
+                                Kanaklata Barua
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mission Statement -->
+            <div class="mt-8 bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold text-brand-dark mb-3" data-lang-key="mission_title">আমাৰ লক্ষ্য</h2>
+                <p class="text-gray-700 text-lg leading-relaxed" data-lang-key="mission_text">
+                    "Raising Strong Daughters" হৈছে অসমৰ মহিলা আৰু জীয়ৰীসকলৰ বাবে এক আশাৰ বন্তি। আমি জ্ঞান আৰু অনুপ্ৰেৰণাৰ এক ডিজিটেল আশ্ৰয়স্থল গঢ়ি তুলিছোঁ—য'ত অধিকাৰ আৰু স্বাস্থ্যৰ গুৰুত্বপূৰ্ণ তথ্যৰ লগতে আমাৰ নিজৰ সমাজৰ শক্তিশালী কাহিনীসমূহো উপলব্ধ। চাহ বাগিচাৰ পৰা আৰম্ভ কৰি প্ৰযুক্তি জগতলৈকে সকলোৰে কণ্ঠক সংযোগ কৰি আমি মৌনতা ভংগ কৰিবলৈ আৰু সহায়ৰ সাঁকো গঢ়িবলৈ প্ৰচেষ্টা চলাইছোঁ। আমাৰ লক্ষ্য সৰল অথচ গভীৰ: এখন এনে সমাজ গঢ়া য'ত লিংগ সমতা এক স্বাভাৱিক নিয়ম, আৰু প্ৰতিগৰাকী ছোৱালীৰ হাতত নিজৰ ভাগ্য গঢ়াৰ আহিলা থাকে। আহক, আমি সজাগথাক কৰ্মলৈ ৰূপান্তৰিত কৰোঁ আৰু সকলোৰে বাবে আশা, মৰ্যাদা আৰু অসীম সম্ভাৱনাৰে ভৰা এক ভৱিষ্যত সৃষ্টি কৰোঁ।
+                </p>
+            </div>
+        </section>
+
+        <!-- =========== 2. ABOUT SECTION =========== -->
+        <section id="about" class="page-section hidden">
+            <div class="bg-white p-6 md:p-8 rounded-lg shadow-lg">
+                <!-- Academic Inspiration -->
+                <h2 class="text-3xl font-bold text-brand-purple mb-4" data-lang-key="about_title">মোৰ প্ৰেৰণা</h2>
+                
+                <div class="flex flex-col md:flex-row gap-6 mb-6">
+                    <!-- Mentor Photo -->
+                    <div class="flex-shrink-0">
+                        <img src="mam.webp" onerror="this.onerror=null; this.src='https://placehold.co/300x400/E9D5FF/312E81?text=Prof.+Rituparna+Patgiri';" alt="Professor Rituparna Patgiri" class="rounded-lg shadow-md w-full md:w-48 h-auto object-cover border-4 border-brand-light-purple">
+                        <p class="text-xs text-center text-gray-500 mt-2 font-medium">Professor Rituparna Patgiri</p>
+                    </div>
+                    
+                    <!-- Inspiration Text -->
+                    <div>
+                        <p class="text-lg text-gray-700 mb-4" data-lang-key="about_prof_intro">
+                            এই প্ৰকল্পটো মোৰ বাবে অত্যন্ত ব্যক্তিগত, যিটো গঢ় লৈ উঠিছে মোৰ গুৰু, আই.আই.টি. গুৱাহাটীৰ মানৱীয় আৰু সমাজ বিজ্ঞান বিভাগৰ অধ্যাপক ৰিতুপৰ্ণা পাটগিৰিৰ গভীৰ প্ৰভাৱৰ ফলত। 'লিংগ, মিডিয়া, আৰু ডিজিটেল সমাজ'ৰ ওপৰত তেখেতৰ অগ্ৰণী গৱেষণা মোৰ বাবে কেৱল এক শৈক্ষিক তথ্য নহয়; ই বিশ্বক চোৱাৰ মোৰ দৃষ্টিভংগী সলনি কৰি দিছে।
+                        </p>
+                        <div class="bg-brand-light-purple p-4 rounded-lg border-l-4 border-brand-purple">
+                            <p class="text-gray-800 italic" data-lang-key="about_prof_focus">
+                                "তেখেতৰ তত্ত্বাৱধানত কাম কৰি মই উপলব্ধি কৰিলোঁ যে প্ৰযুক্তি কেৱল কোড বা সংযোগৰ বিষয় নহয়—ই সামাজিক পৰিৱৰ্তনৰ এক গুৰুত্বপূৰ্ণ স্থান। অধ্যাপক পাটগিৰিৰ অন্তৰ্দৃষ্টিয়ে মোক দেখুৱাই দিছিল যে ডিজিটেল প্লেটফৰ্মবোৰে কেনেকৈ সামাজিক পৰিৱৰ্তনৰ শক্তিশালী ইঞ্জিন হ'ব পাৰে। তেখেতৰ কামেই মোক এই কথা বুজাই দিছিল যে এখন ৱেবছাইট কেৱল তথ্যতকৈও অধিক হ'ব পাৰে; ই অসমত লিংগ সজাগতাৰ বাবে এক সৱলীকৰণৰ আহিলা হ'ব পাৰে।"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-lg text-gray-700 mb-8" data-lang-key="about_prof_conclusion">
+                    এই প্ৰকল্পটো তেখেতৰ নিৰ্দেশনাৰ এক প্ৰমাণ, যিয়ে মোক ইঞ্জিনিয়াৰিংৰ কাৰিকৰী দিশৰ বাহিৰলৈ গৈ স্ক্ৰীণৰ আঁৰৰ মানৱীয় কাহিনীোৰক চাবলৈ শিকাইছে। আমাৰ ডিজিটেল যুগত লিংগৰ সূক্ষ্মতা বুজিবলৈ তেখেতৰ নিষ্ঠাই মোক 'Raising Strong Daughters' গঢ়িবলৈ অনুপ্ৰাণিত কৰিছে—কেৱল এক প্ৰকল্প হিচাপে নহয়, বৰঞ্চ তেখেতে কল্পনা কৰা সমতাপূৰ্ণ সমাজখনলৈ বৰঙণি আগবঢ়োৱাৰ এক আন্তৰিক প্ৰচেষ্টা হিচাপে।
+                </p>
+
+                <!-- Collaborations -->
+                <h3 class="text-2xl font-bold text-brand-dark mt-8 mb-4" data-lang-key="about_collab_title">আমাৰ সহযোগী সংস্থাসমূহ</h3>
+                <p class="text-gray-700 mb-6" data-lang-key="about_collab_intro">
+                    আমি অসমত লিংগ সমতা আৰু সামাজিক অন্তৰ্ভুক্তিৰ বাবে কাম কৰি থকা কেইবাটাও সক্ৰিয় আঞ্চলিক সংস্থাৰ সৈতে সংযুক্ত:
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- NGO 1: Akam Foundation -->
+                    <div class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
+                        <h4 class="text-xl font-bold text-brand-purple" data-lang-key="ngo1_name">Akam Foundation</h4>
+                        <p class="text-gray-600 mt-2" data-lang-key="ngo1_desc">
+                            A leading organization focusing on youth empowerment and community development, aligning with our goals for gender awareness.
+                        </p>
+                    </div>
+                    <!-- NGO 2: RWUAANGO -->
+                    <div class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
+                        <h4 class="text-xl font-bold text-brand-purple" data-lang-key="ngo2_name">Rural Women Upliftment Association (RWUAANGO)</h4>
+                        <p class="text-gray-600 mt-2" data-lang-key="ngo2_desc">
+                            Dedicated to uplifting rural women, their work in livelihood and health directly supports our mission.
+                        </p>
+                    </div>
+                    <!-- NGO 3: Women's Development Centre -->
+                    <div class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
+                        <h4 class="text-xl font-bold text-brand-purple" data-lang-key="ngo3_name">Women’s Development Centre, Guwahati</h4>
+                        <p class="text-gray-600 mt-2" data-lang-key="ngo3_desc">
+                            A key resource center providing support and counseling, enhancing our network for women's safety and development.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== 3. LEARNING PORTAL SECTION =========== -->
+        <section id="learning" class="page-section hidden">
+            <h2 class="text-3xl font-bold text-brand-purple mb-6" data-lang-key="learning_title">শিক্ষা আৰু সজাগতা প'ৰ্টেল</h2>
+            <div class="space-y-4">
+                
+                <!-- Accordion 1: Gender Rights -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="accordion-toggle w-full p-4 text-left">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xl font-bold text-brand-dark">
+                                <span data-lang-key="learn1_title_as">লিংগ অধিকাৰ আৰু সমতা</span>
+                                <span class="block text-sm font-normal text-gray-500" data-lang-key="learn1_title_en">Gender Rights and Equality</span>
+                            </h3>
+                            <span class="text-2xl text-brand-purple transform transition-transform duration-300">+</span>
+                        </div>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-4 border-t border-gray-200">
+                            <p class="text-gray-700" data-lang-key="learn1_content">
+                                লিংগ সমতা মানে কেৱল মহিলাৰ অধিকাৰ নহয়, ই পুৰুষ আৰু মহিলা উভয়েই সমান সুযোগ, অধিকাৰ আৰু দায়িত্ব পোৱাটো নিশ্চিত কৰে। ভাৰতীয় সংবিধানৰ অনুচ্ছেদ ১৪, ১৫, আৰু ২১-এ সমতা আৰু মৰ্যাদাৰ অধিকাৰ প্ৰদান কৰে। এই শিতানত, আমি এই অধিকাৰসমূহ আৰু দৈনন্দিন জীৱনত ইয়াৰ প্ৰয়োগৰ বিষয়ে আলোচনা কৰিম।
+                            </p>
+                            <!-- Placeholder for infographics -->
+                            <img src="https://placehold.co/600x200/FDF2F8/7E22CE?text=Infographic+on+Gender+Rights" alt="Infographic placeholder" class="mt-4 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 2: Health and Hygiene -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="accordion-toggle w-full p-4 text-left">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xl font-bold text-brand-dark">
+                                <span data-lang-key="learn2_title_as">ছোৱালীৰ স্বাস্থ্য, পৰিচ্ছন্নতা আৰু শিক্ষা</span>
+                                <span class="block text-sm font-normal text-gray-500" data-lang-key="learn2_title_en">Health, Hygiene, and Education for Girls</span>
+                            </h3>
+                            <span class="text-2xl text-brand-purple transform transition-transform duration-300">+</span>
+                        </div>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-4 border-t border-gray-200">
+                            <p class="text-gray-700" data-lang-key="learn2_content">
+                                এগৰাকী শিক্ষিত আৰু স্বাস্থ্যৱান ছোৱালীয়েই এখন সুস্থ সমাজৰ ভেটি। এই শিতানত মাহেকীয়া স্বাস্থ্য (menstrual hygiene), পুষ্টি, আৰু মানসিক স্বাস্থ্যৰ গুৰুত্ব সম্পৰ্কে আলোচনা কৰা হৈছে। শিক্ষাৰ জৰিয়তে ছোৱালী এজনী কেনেদৰে স্বাৱলম্বী হ'b পাৰে, তাৰ বিষয়েও ইয়াত তথ্য দিয়া হৈছে।
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 3: Women in Media & Arts -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="accordion-toggle w-full p-4 text-left">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xl font-bold text-brand-dark">
+                                <span data-lang-key="learn3_title_as">মিডিয়া, কলা, আৰু উদ্যোগ</span>
+                                <span class="block text-sm font-normal text-gray-500" data-lang-key="learn3_title_en">Women in Media, Arts, and Entrepreneurship</span>
+                            </h3>
+                            <span class="text-2xl text-brand-purple transform transition-transform duration-300">+</span>
+                        </div>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-4 border-t border-gray-200">
+                            <p class="text-gray-700" data-lang-key="learn3_content">
+                                মিডিয়া আৰু কলাই সমাজৰ ধাৰণা গঢ়ি তোলে। এই শিতানত আমি অসমৰ মহিলাসকলে কেনেদৰে কলা, সাহিত্য, আৰু মিডিয়াত অৱদান আগবঢ়াইছে, সেই বিষয়ে জানিম। ইয়াৰ উপৰিও, মহিলা উদ্যোগীসকলৰ বাবে থকা সুযোগ আৰু তেওঁলোকৰ সফলতাক আমি উদযাপন কৰিম।
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 4: Female Freedom Fighters (NEW) -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="accordion-toggle w-full p-4 text-left">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xl font-bold text-brand-dark">
+                                <span data-lang-key="learn4_title_as">অসমৰ মহিলা স্বাধীনতা সংগ্ৰামী</span>
+                                <span class="block text-sm font-normal text-gray-500" data-lang-key="learn4_title_en">Female Freedom Fighters of Assam</span>
+                            </h3>
+                            <span class="text-2xl text-brand-purple transform transition-transform duration-300">+</span>
+                        </div>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-4 border-t border-gray-200 space-y-6">
+                            
+                            <!-- Fighter 1: Kanaklata Barua -->
+                            <div class="flex flex-col sm:flex-row items-start gap-4">
+                                <img src="https://placehold.co/100x100/7E22CE/FFF?text=Kanaklata+Barua" alt="Kanaklata Barua" class="w-24 h-24 rounded-lg shadow-md object-cover flex-shrink-0">
+                                <div>
+                                    <h4 class="text-lg font-bold text-brand-dark" data-lang-key="fighter1_name">কনকলতা বৰুৱা</h4>
+                                    <p class="text-gray-700" data-lang-key="fighter1_desc">'বীৰবালা' নামেৰে জনাজাত, তেওঁ এগৰাকী অসমীয়া স্বাধীনতা সংগ্ৰামী আছিল যিয়ে ভাৰত ত্যাগ আন্দোলনৰ সময়ত 'মৃত্যু বাহিনী'ৰ নেতৃত্ব দিছিল। গহপুৰ আৰক্ষী থানাত ভাৰতীয় পতাকা উত্তোলন কৰিবলৈ চেষ্টা কৰোঁতে মাত্ৰ ১৭ বছৰ বয়সতে তেওঁ শ্বহীদ হৈছিল।</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Fighter 2: Bhogeswari Phukanani -->
+                            <div class="flex flex-col sm:flex-row items-start gap-4">
+                                <img src="https://placehold.co/100x100/7E22CE/FFF?text=Bhogeswari+Phukanani" alt="Bhogeswari Phukanani" class="w-24 h-24 rounded-lg shadow-md object-cover flex-shrink-0">
+                                <div>
+                                    <h4 class="text-lg font-bold text-brand-dark" data-lang-key="fighter2_name">ভোগেশ্বৰী ফুকননী</h4>
+                                    <p class="text-gray-700" data-lang-key="fighter2_desc">ভাৰত ত্যাগ আন্দোলনৰ নগাঁও, অসমৰ এগৰাকী বিশিষ্ট ব্যক্তি। এটা শোভাযাত্ৰাৰ সময়ত ভাৰতীয় পতাকাৰ মৰ্যাদা ৰক্ষা কৰিবলৈ চেষ্টা কৰোঁতে ব্ৰিটিছ আৰক্ষীয়ে তেওঁক গুলীয়াই হত্যা কৰিছিল। তেতিয়া তেওঁৰ বয়স আছিল ৬০ বছৰ।</p>
+                                </div>
+                            </div>
+
+                            <!-- Fighter 3: Chandraprabha Saikiani -->
+                            <div class="flex flex-col sm:flex-row items-start gap-4">
+                                <img src="https://placehold.co/100x100/7E22CE/FFF?text=Chandraprabha+Saikiani" alt="Chandraprabha Saikiani" class="w-24 h-24 rounded-lg shadow-md object-cover flex-shrink-0">
+                                <div>
+                                    <h4 class="text-lg font-bold text-brand-dark" data-lang-key="fighter3_name">চন্দ্ৰপ্ৰভা শইকীয়ানী</h4>
+                                    <p class="text-gray-700" data-lang-key="fighter3_desc">এগৰাকী অগ্নিকন্যা সমাজ সংস্কাৰক, লেখিকা আৰু স্বাধীনতা সংগ্ৰামী। তেওঁ সদৌ অসম প্ৰাদেশিক মহিলা সমিতিৰ প্ৰতিষ্ঠাপক আছিল আৰু অসহযোগ আন্দোলনৰ এগৰাকী নেত্ৰী হিচাপে জাতি-ভেদৰ বিৰুদ্ধে আৰু মহিলাৰ অধিকাৰৰ বাবে যুঁজ দিছিল।</p>
+                                </div>
+                            </div>
+
+                            <!-- Fighter 4: Pushpalata Das -->
+                            <div class="flex flex-col sm:flex-row items-start gap-4">
+                                <img src="https://placehold.co/100x100/7E22CE/FFF?text=Pushpalata+Das" alt="Pushpalata Das" class="w-24 h-24 rounded-lg shadow-md object-cover flex-shrink-0">
+                                <div>
+                                    <h4 class="text-lg font-bold text-brand-dark" data-lang-key="fighter4_name">পুষ্পলতা দাস</h4>
+                                    <p class="text-gray-700" data-lang-key="fighter4_desc">এগৰাকী গান্ধীवादी স্বাধীনতা সংগ্ৰামী, সমাজকৰ্মী আৰু সাংসদ। তেওঁ 'মৃত্যু বাহিনী'ৰ এগৰাকী নেত্ৰী আছিল আৰু ভাৰত ত্যাগ আন্দোলনৰ সময়ত কাৰাবাস খাটিছিল। পিছলৈ তেওঁ ৰাজ্যসভাৰ সদস্য হৈ সমাজ সেৱা অব্যাহত ৰাখিছিল।</p>
+                                </div>
+                            </div>
+
+                            <!-- Fighter 5: Nalinibala Devi -->
+                            <div class="flex flex-col sm:flex-row items-start gap-4">
+                                <img src="https://placehold.co/100x100/7E22CE/FFF?text=Nalinibala+Devi" alt="Nalinibala Devi" class="w-24 h-24 rounded-lg shadow-md object-cover flex-shrink-0">
+                                <div>
+                                    <h4 class="text-lg font-bold text-brand-dark" data-lang-key="fighter5_name">নলিনীবালা দেৱী</h4>
+                                    <p class="text-gray-700" data-lang-key="fighter5_desc">এগৰাকী বিশিষ্ট অসমীয়া কবি আৰু লেখিকা, তেওঁ স্বাধীনতা আন্দোলনতো সক্ৰিয়ভাৱে জড়িত আছিল। তেওঁৰ দেশপ্ৰেমমূলক কবিতা আৰু লেখাৰ জৰিয়তে তেওঁ বহু লোকক অসহযোগ আন্দোলনত যোগদান কৰিবলৈ আৰু স্বাধীনতাৰ বাবে যুঁজিবলৈ অনুপ্ৰাণিত কৰিছিল।</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- =========== 4. STORIES & VOICES SECTION (RE-ADDED) =========== -->
+        <section id="stories" class="page-section hidden">
+            <h2 class="text-3xl font-bold text-brand-purple mb-6" data-lang-key="stories_title">কাহিনী আৰু কণ্ঠস্বৰ</h2>
+            <p class="text-lg text-gray-700 mb-6" data-lang-key="stories_intro">
+                অসমৰ বিভিন্ন কোণৰ পৰা মহিলাসকলৰ শক্তি আৰু সফলতাৰ কাহিনী। আপোনাৰ নিজৰ কাহিনীও আমালৈ পঠাওক!
+            </p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Story 1: Text -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="village.png" onerror="this.onerror=null; this.src='https://placehold.co/400x250/7E22CE/FFF?text=Community+Leader';" alt="Story placeholder" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold text-brand-dark" data-lang-key="story1_title">গাওঁখনৰ পৰিৱৰ্তন</h3>
+                        <p class="text-gray-600 mt-2" data-lang-key="story1_desc">
+                            শিৱসাগৰৰ এগৰাকী মহিলাই কেনেদৰে এটা আত্ম-সহায়ক গোট আৰম্ভ কৰি নিজৰ গাওঁখনৰ মহিলাসকলক স্বাৱলম্বী কৰি তুলিলে।
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Story 2: Local Stories (Clickable Card) -->
+                <div id="btn-local-stories" class="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-shadow">
+                    <img src="local stories.png" onerror="this.onerror=null; this.src='https://placehold.co/400x250/7E22CE/FFF?text=Local+Stories';" alt="Local Stories Cover" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold text-brand-dark flex items-center">
+                            <span data-lang-key="story2_title">স্থানীয় কাহিনী</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 text-brand-purple" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </h3>
+                        <p class="text-gray-600 mt-2" data-lang-key="story2_desc">
+                            মহিলাসকলৰ জীৱন আৰু তেওঁলোকে সন্মুখীন হোৱা প্ৰত্যাহ্বানৰ বিষয়ে।
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Story 3: User Submission -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden border-2 border-dashed border-brand-purple p-4 flex flex-col items-center justify-center min-h-[200px]">
+                    <h3 class="text-xl font-bold text-brand-dark text-center" data-lang-key="story3_title">আপোনাৰ কাহিনী ইয়াত দিয়ক</h3>
+                    <p class="text-gray-600 mt-2 text-center" data-lang-key="story3_desc">
+                        তলৰ 'Interactive' শিতানলৈ গৈ আপোনাৰ অভিজ্ঞতা আমাক জনাওক।
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== 5. RESOURCES SECTION (RE-ADDED) =========== -->
+        <section id="resources" class="page-section hidden">
+            <h2 class="text-3xl font-bold text-brand-purple mb-6" data-lang-key="resources_title">সম্পদ আৰু সহায়</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Helplines -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-bold text-brand-dark mb-4" data-lang-key="resources_helplines_title">জৰুৰীকালীন হেল্পলাইন</h3>
+                    <ul class="space-y-3 list-disc list-inside text-gray-700">
+                        <li>
+                            <strong data-lang-key="helpline1_name">Women Helpline (Mahila):</strong>
+                            <a href="tel:181" class="text-brand-purple font-medium">181</a>
+                        </li>
+                        <li>
+                            <strong data-lang-key="helpline2_name">Child Helpline:</strong>
+                            <a href="tel:1098" class="text-brand-purple font-medium">1098</a>
+                        </li>
+                        <li>
+                            <strong data-lang-key="helpline3_name">Police:</strong>
+                            <a href="tel:100" class="text-brand-purple font-medium">100</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Downloadable Guides -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-bold text-brand-dark mb-4" data-lang-key="resources_guides_title">Downloadable Guides (Assamese)</h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="#" class="flex items-center p-3 bg-brand-light-purple rounded-lg hover:shadow-md transition-shadow">
+                                <!-- PDF Icon -->
+                                <svg class="w-6 h-6 text-brand-purple mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 1h8v2H6V5zm0 4h8v2H6V9zm0 4h8v2H6v-2z" clip-rule="evenodd"></path></svg>
+                                <span data-lang-key="guide1">চৰকাৰী আঁচনিসমূহৰ হাতপুথি</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center p-3 bg-brand-light-purple rounded-lg hover:shadow-md transition-shadow">
+                                <svg class="w-6 h-6 text-brand-purple mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 1h8v2H6V5zm0 4h8v2H6V9zm0 4h8v2H6v-2z" clip-rule="evenodd"></path></svg>
+                                <span data-lang-key="guide2">ছোৱালীৰ শিক্ষাৰ বাবে পঞ্জীয়ন</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Local NGOs -->
+                <div class="bg-white p-6 rounded-lg shadow-md md:col-span-2">
+                    <h3 class="text-2xl font-bold text-brand-dark mb-4" data-lang-key="resources_ngo_title">স্থানীয় সহায়ক গোট আৰু NGO</h3>
+                    <p class="text-gray-700 mb-4" data-lang-key="resources_ngo_desc">
+                        আমাৰ 'About' পৃষ্ঠাত উল্লেখ কৰা সংস্থাসমূহৰ উপৰিও, আপোনাৰ ওচৰৰ স্থানীয় আত্ম-সহায়ক গোট (SHG) আৰু বেচৰকাৰী সংস্থাসমূহৰ সৈতে যোগাযোগ কৰক।
+                    </p>
+                    <a href="#about" class="nav-link-direct text-brand-purple font-medium" data-lang-key="resources_ngo_link">আমাৰ সহযোগীসকলৰ বিষয়ে জানক &rarr;</a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- =========== 6. INTERACTIVE SECTION (RE-ADDED) =========== -->
+        <section id="interactive" class="page-section hidden">
+            <h2 class="text-3xl font-bold text-brand-purple mb-6" data-lang-key="interactive_title">মতামত আৰু সজাগতা কুইজ</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <!-- Quiz Module -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold text-brand-dark mb-4" data-lang-key="quiz_title">সজাগতা কুইজ</h3>
+                    <form id="quiz-form">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-medium mb-2" data-lang-key="quiz_q1">
+                                Q1: ভাৰতত মহিলা হেল্পলাইন নম্বৰ কি? (What is the Women Helpline number in India?)
+                            </label>
+                            <div class="space-y-2">
+                                <label class="flex items-center"><input type="radio" name="q1" value="100" class="mr-2"> 100</label>
+                                <label class="flex items-center"><input type="radio" name="q1" value="181" class="mr-2"> 181</label>
+                                <label class="flex items-center"><input type="radio" name="q1" value="1098" class="mr-2"> 1098</label>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-medium mb-2" data-lang-key="quiz_q2">
+                                Q2: ভাৰতীয় সংবিধানৰ কোনটো অনুচ্ছেদে সমতাৰ অধিকাৰ নিশ্চিত কৰে? (Which article of the Indian Constitution ensures Right to Equality?)
+                            </label>
+                            <div class="space-y-2">
+                                <label class="flex items-center"><input type="radio" name="q2" value="Article 14" class="mr-2"> Article 14</label>
+                                <label class="flex items-center"><input type="radio" name="q2" value="Article 370" class="mr-2"> Article 370</label>
+                                <label class="flex items-center"><input type="radio" name="q2" value="Article 51A" class="mr-2"> Article 51A</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-brand-purple text-white px-6 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors" data-lang-key="quiz_submit">
+                            দাখিল কৰক
+                        </button>
+                    </form>
+                    <div id="quiz-result" class="mt-4 hidden font-medium"></div>
+                </div>
+
+                <!-- Feedback Form -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold text-brand-dark mb-4" data-lang-key="feedback_title">মতামত বা কাহিনী দিয়ক</h3>
+                    <p class="text-gray-600 mb-4" data-lang-key="feedback_intro">
+                        আপোনাৰ মতামত, প্ৰশ্ন, বা আপোনাৰ নিজৰ কাহিনী আমালৈ পঠাওক।
+                    </p>
+                    <form id="feedback-form" class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-gray-700 mb-1" data-lang-key="form_name">নাম</label>
+                            <input type="text" id="name" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-purple">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-gray-700 mb-1" data-lang-key="form_email">ইমেইল (Optional)</label>
+                            <input type="email" id="email" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-purple">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-gray-700 mb-1" data-lang-key="form_message">মতামত / কাহিনী</label>
+                            <textarea id="message" rows="4" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-purple" required></textarea>
+                        </div>
+                        <button type="submit" class="bg-brand-dark text-white px-6 py-2 rounded-lg font-medium hover:bg-opacity-90 transition-colors" data-lang-key="form_submit">
+                            মতামত দাখিল কৰক
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- =========== 7. BHOGESWARI PHUKANANI BIO SECTION =========== -->
+        <section id="bhogeswari-bio" class="page-section hidden">
+            <div class="bg-white p-6 md:p-8 rounded-lg shadow-lg">
+                <button id="back-to-home-btn-bhogeswari" class="mb-6 flex items-center text-brand-purple font-medium hover:underline back-to-home-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    <span data-lang-key="back_home">Back to Home</span>
+                </button>
+
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-purple mb-6" data-lang-key="bhogeswari_title">Shaheed Bhogeswari Phukanani: The Lioness of Assam's 1942 Quit India Movement</h2>
+
+                <div class="md:flex gap-8">
+                    <div class="md:w-1/3 mb-6 md:mb-0">
+                        <img src="images.jpeg" alt="Shaheed Bhogeswari Phukanani" class="rounded-lg shadow-md w-full h-auto object-cover">
+                        <p class="text-sm text-gray-500 mt-2 italic text-center">Shaheed Bhogeswari Phukanani (1885 - 1942)</p>
+                    </div>
+                    <div class="md:w-2/3 space-y-4 text-gray-800 leading-relaxed">
+                        <p data-lang-key="bhogeswari_p1">In the grand saga of India's freedom struggle, the names of prominent leaders are well-known. However, the foundation of this independence was built on the sacrifices of countless unsung heroes—ordinary men and women who displayed extraordinary courage. Among these revered figures is <strong>Shaheed Bhogeswari Phukanani</strong>, a braveheart from Assam who, at over 60 years of age, laid down her life for the nation's honour.</p>
+                        <p data-lang-key="bhogeswari_p2">Her story is a powerful testament to the fact that patriotism and the courage to fight oppression are not bound by age.</p>
+                        
+                        <h3 class="text-2xl font-bold text-brand-dark mt-8 mb-3" data-lang-key="bhogeswari_h1">The Call of a Nation</h3>
+                        <p data-lang-key="bhogeswari_p3">Born in 1885 in the Nagaon district of Assam, Bhogeswari Phukanani was a simple housewife and a mother to eight children. Despite her domestic life, she was deeply imbued with the spirit of nationalism. She and her family were active participants in the freedom movement, inspired by Mahatma Gandhi's call for self-reliance and non-cooperation.</p>
+                        <p data-lang-key="bhogeswari_p4">When the Quit India Movement was launched in August 1942, it ignited a fire across the nation, demanding the British "Quit India." In Assam, the movement was particularly intense. The British Raj responded with brutal force, banning the Indian National Congress, seizing its offices, and arresting its leaders.</p>
+                        <p data-lang-key="bhogeswari_p5">In the Berhampur area of Nagaon, the local Congress office, which Bhogeswari Phukanani had helped establish, was seized and locked by the British authorities. This act was seen as a direct challenge to the local people's pride and their fight for freedom.</p>
+
+                        <h3 class="text-2xl font-bold text-brand-dark mt-8 mb-3" data-lang-key="bhogeswari_h2">The Fateful Day of Defiance</h3>
+                        <p data-lang-key="bhogeswari_p6">On September 18, 1942, the local community decided to reclaim their office. A massive, peaceful procession was organized to march to the Berhampur Congress office and re-open it.</p>
+                        <p data-lang-key="bhogeswari_p7">Bhogeswari Phukanani, then around 60 years old, was at the forefront of this procession. She, along with her daughter Ratnamala, led the crowd, holding the Tiranga (the Indian tricolour flag) high and chanting slogans of "Vande Mataram."</p>
+                        <p data-lang-key="bhogeswari_p8">The procession was soon confronted by a large police force led by a British officer, Captain Finish (also referred to as Finch in some accounts). The officer ordered the unarmed crowd to disperse, but they stood their ground.</p>
+                        <p data-lang-key="bhogeswari_p9">Enraged by the crowd's defiance, Captain Finish attempted to snatch the national flag from Ratnamala's hands, disrespecting the symbol of their struggle. Seeing this, Bhogeswari Phukanani could not contain her anger. In a powerful, instinctive act of defiance, she took the pole of her own flag and struck Captain Finish on the head.</p>
+                        <p data-lang-key="bhogeswari_p10">Stunned and infuriated by the counter-attack from an elderly woman, Captain Finish immediately pulled out his revolver and shot her at point-blank range.</p>
+                        <p data-lang-key="bhogeswari_p11">Grievously wounded, Bhogeswari Phukanani fell to the ground. She succumbed to her injuries two days later, on September 20, 1942, achieving martyrdom for the cause of India's independence.</p>
+
+                        <h3 class="text-2xl font-bold text-brand-dark mt-8 mb-3" data-lang-key="bhogeswari_h3">A Legacy That Endures</h3>
+                        <p data-lang-key="bhogeswari_p12">The sacrifice of Bhogeswari Phukanani did not go in vain. Her martyrdom turned her into a powerful symbol of resistance and courage across Assam. Her act of defending the national flag with her life inspired thousands more to join the Quit India Movement, further strengthening the resolve to oust the British.</p>
+                        <p data-lang-key="bhogeswari_p13">Today, Bhogeswari Phukanani is revered as "Shaheed" (Martyr) and celebrated as one of Assam's greatest freedom fighters.</p>
+                        <p data-lang-key="bhogeswari_p14">Her legacy is formally remembered in several ways:</p>
+                        <ul class="list-disc list-inside ml-4 space-y-2" data-lang-key="bhogeswari_list">
+                            <li><strong>Bhogeswari Phukanani Civil Hospital:</strong> The civil hospital in Nagaon is named in her honour.</li>
+                            <li><strong>Bhogeswari Phukanani Indoor Stadium:</strong> An indoor stadium in Guwahati is also dedicated to her memory.</li>
+                            <li><strong>Commemorative Stamps:</strong> India Post has released special covers honouring her as an "Unsung Hero" of the freedom struggle.</li>
+                        </ul>
+                        <p data-lang-key="bhogeswari_p15">Shaheed Bhogeswari Phukanani's story is a vital chapter in India's history. It serves as a profound reminder that the fight for freedom was won by ordinary people who, when the moment came, showed extraordinary courage and were willing to make the ultimate sacrifice for their motherland.</p>
+                        <p class="text-sm text-gray-600 italic mt-4 pt-4 border-t" data-lang-key="bhogeswari_video_note">This video from All India Radio's 'Azadi ka Safar' series pays tribute to Bhogeswari Phukanani and other valiant women freedom fighters from Assam.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== 8. KANAKLATA BARUA BIO SECTION =========== -->
+        <section id="kanaklata-bio" class="page-section hidden">
+            <div class="bg-white p-6 md:p-8 rounded-lg shadow-lg">
+                <button id="back-to-home-btn-kanaklata" class="mb-6 flex items-center text-brand-purple font-medium hover:underline back-to-home-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    <span data-lang-key="back_home">Back to Home</span>
+                </button>
+
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-purple mb-6" data-lang-key="kanaklata_title">Birbala Kanaklata Barua: The 17-Year-Old Martyr of the Quit India Movement</h2>
+
+                <div class="md:flex gap-8">
+                    <div class="md:w-1/3 mb-6 md:mb-0">
+                        <img src="Kanaklata Barua.jpg" alt="Birbala Kanaklata Barua" class="rounded-lg shadow-md w-full h-auto object-cover">
+                        <p class="text-sm text-gray-500 mt-2 italic text-center">Birbala Kanaklata Barua (1924 - 1942)</p>
+                    </div>
+                    <div class="md:w-2/3 space-y-4 text-gray-800 leading-relaxed">
+                        <p data-lang-key="kanaklata_p1">In the annals of India's freedom struggle, there are stories of sacrifice so profound they transcend time. The story of <strong>Kanaklata Barua</strong>, a young girl from Assam who stared death in the face for the love of her nation, is one of the most powerful and inspiring. At an age when most are just beginning to discover the world, she made the ultimate sacrifice, cementing her legacy as "Birbala" (Brave Girl) and a true martyr.</p>
+
+                        <h3 class="text-2xl font-bold text-brand-dark mt-8 mb-3" data-lang-key="kanaklata_h1">A Spark Ignited in Assam</h3>
+                        <p data-lang-key="kanaklata_p2">Kanaklata Barua was born on December 22, 1924, in the village of Barangabari, in the Darrang district of Assam. Her life was marked by early tragedy; she lost her mother at the age of five and her father soon after, leaving her to care for her younger siblings. This fostered a deep sense of responsibility that would soon transform into a powerful patriotic resolve.</p>
+                        <p data-lang-key="kanaklata_p3">By 1942, Mahatma Gandhi's call for the Quit India Movement had electrified the nation. The mantra of "Do or Die" resonated deeply in the towns and villages of Assam, including in Kanaklata's district. She was inspired by the speeches of local Congress leaders and, despite her young age, was determined to play her part.</p>
+                        <p data-lang-key="kanaklata_p4">She joined the <em>Mrityu Bahini</em> (Death Squad), a group of youth volunteers formed with the express purpose of sacrificing their lives, if necessary, to uphold the honour of the nation and its flag.</p>
+
+                        <h3 class="text-2xl font-bold text-brand-dark mt-8 mb-3" data-lang-key="kanaklata_h2">The Fateful Day: September 20, 1942</h3>
+                        <p data-lang-key="kanaklata_p5">The local Congress leaders planned a bold act of defiance: to hoist the Tiranga (Indian tricolour flag) at the Gohpur Police Station, a symbol of British authority. This was a direct challenge to the colonial government, which had banned the flag and any such processions.</p>
+                        <p data-lang-key="kanaklata_p6">On September 20, 1942, a large, unarmed procession marched towards the police station, chanting patriotic slogans. At its head, leading the women's contingent with unwavering determination, was 17-year-old Kanaklata Barua, holding the national flag high.</p>
+                        <p data-lang-key="kanaklata_p7">As they reached the station, they were confronted by a police force led by the officer-in-charge, Rebati Mahan Som. He warned the procession to halt, threatening to open fire if they advanced.</p>
+                        <p data-lang-key="kanaklata_p8">Kanaklata's voice rang out, undeterred. She declared that they were unarmed, their intentions were peaceful, and they would not retreat. She was there to do her duty and he could do his.</p>
+                        <p data-lang-key="kanaklata_p9">As she stepped forward, the police fired.</p>
+                        <p data-lang-key="kanaklata_p10">Kanaklata was shot in the chest. She fell to the ground, still clutching the flag, which she tried to keep from falling. As the flag began to dip, another young volunteer from the Mrityu Bahini, Mukunda Kakoti, rushed forward to take it from her. He, too, was shot and killed.</p>
+                        <p data-lang-key="kanaklata_p11">Despite the brutal crackdown, the spirit of the volunteers was not broken. Another person, Rampati Rajkhowa, eventually managed to hoist the flag at the police station, fulfilling the mission for which Kanaklata and Mukunda had laid down their lives.</p>
+
+                        <h3 class="text-2xl font-bold text-brand-dark mt-8 mb-3" data-lang-key="kanaklata_h3">A Legacy Cast in Courage</h3>
+                        <p data-lang-key="kanaklata_p12">Kanaklata Barua's martyrdom at the tender age of 17 sent shockwaves through the region and immortalized her as a symbol of pure, unyielding courage. She was not a trained soldier but an ordinary village girl who, when the moment came, displayed a bravery that humbled the might of an empire.</p>
+                        <p data-lang-key="kanaklata_p13">Her sacrifice remains a cornerstone of Assamese and Indian history. Today, her legacy is honoured in numerous ways:</p>
+                        <ul class="list-disc list-inside ml-4 space-y-2" data-lang-key="kanaklata_list">
+                            <li><strong>ICGS Kanaklata Barua:</strong> The Indian Coast Guard commissioned a Fast Patrol Vessel in her name in 2020, carrying her story of bravery onto the high seas.</li>
+                            <li><strong>Statues and Memorials:</strong> A life-size statue of her at Gohpur, the site of her martyrdom, and the Kanaklata Udyan, a park in Tezpur, serve as constant reminders of her sacrifice.</li>
+                            <li><strong>Birbala Title:</strong> The title "Birbala" is now synonymous with her name, a title she earned with her blood.</li>
+                        </ul>
+                        <p data-lang-key="kanaklata_p14">The story of Kanaklata Barua is a powerful reminder that the fight for freedom was not just waged by prominent leaders in distant cities, but also by teenagers in small villages, whose love for their country was absolute and whose courage knew no bounds.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== 9. LOCAL STORIES / INTERVIEWS PAGE (NEW) =========== -->
+        <section id="local-stories-page" class="page-section hidden">
+            <!-- Added a distinct header background for this page -->
+            <div class="bg-gradient-to-r from-brand-light-purple to-white p-6 md:p-8 rounded-t-lg shadow-sm border-b border-brand-purple/20">
+                <button class="mb-4 flex items-center text-brand-purple font-medium hover:underline back-to-stories-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    <span data-lang-key="back_stories">Back to Stories</span>
+                </button>
+
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-purple mb-4" data-lang-key="interviews_title">Local Voices: Interviews from IIT Guwahati</h2>
+                <p class="text-lg text-gray-700" data-lang-key="interviews_intro">We spoke with women working and studying on campus to understand their experiences, challenges, and hopes for a more inclusive future.</p>
+            </div>
+
+            <div class="bg-white p-6 md:p-8 rounded-b-lg shadow-lg space-y-10">
+                
+                <!-- SECTION 1: STAFF INTERVIEWS -->
+                <div>
+                    <h3 class="text-2xl font-bold text-brand-dark mb-6 border-b-2 border-brand-light-purple pb-2 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-brand-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        Voices from Guwahati People
+                    </h3>
+                    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <!-- Interview 1: Anju Devi -->
+                        <div class="bg-brand-pink/30 border border-brand-light-purple rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-start">
+                            <img src="https://placehold.co/150x150/7E22CE/FFF?text=Anju" alt="Anju Devi" class="w-20 h-20 rounded-full object-cover border-2 border-brand-purple flex-shrink-0">
+                            <div class="w-full">
+                                <h4 class="text-xl font-bold text-brand-purple mb-3">Anju Devi (Age 38)</h4>
+                                <div class="space-y-3 text-gray-800 text-sm">
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Challenges:</strong> <span data-lang-key="int1_a1">My work starts early and ends late. At home, I have to manage everything. Sometimes, people don’t respect my work just because I’m a woman.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Rights Awareness:</strong> <span data-lang-key="int1_a2">I know a little from senior ladies and the union.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Digital Use:</strong> <span data-lang-key="int1_a3">I use a mobile for calls and WhatsApp. I'd try an online platform if it was in Assamese.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> Role Model:</strong> <span data-lang-key="int1_a4">My mother, who raised us alone by working in fields.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Needs:</strong> <span data-lang-key="int1_a5">Info on health, savings, and where to go for trouble. Simple audio/video messages would be best.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Interview 2: Namita Das -->
+                        <div class="bg-brand-pink/30 border border-brand-light-purple rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-start">
+                            <img src="https://placehold.co/150x150/7E22CE/FFF?text=Namita" alt="Namita Das" class="w-20 h-20 rounded-full object-cover border-2 border-brand-purple flex-shrink-0">
+                            <div class="w-full">
+                                <h4 class="text-xl font-bold text-brand-purple mb-3">Namita Das (Age 45)</h4>
+                                <div class="space-y-3 text-gray-800 text-sm">
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Challenges:</strong> <span data-lang-key="int2_a1">Hard work isn't valued, rude comments from men, and full duty at home.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Rights Awareness:</strong> <span data-lang-key="int2_a2">I only know about getting paid on time, not much about safety or leave.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Digital Use:</strong> <span data-lang-key="int2_a3">Language is a problem. An Assamese help website would be better.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> Role Model:</strong> <span data-lang-key="int2_a4">A madam in the hostel who listens, helps, and stands up for what's right.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Needs:</strong> <span data-lang-key="int2_a5">Direct helpline numbers in our language and someone to listen to our problems.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Interview 3: Suchitra Barman -->
+                        <div class="bg-brand-pink/30 border border-brand-light-purple rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-start">
+                            <img src="https://placehold.co/150x150/7E22CE/FFF?text=Suchitra" alt="Suchitra Barman" class="w-20 h-20 rounded-full object-cover border-2 border-brand-purple flex-shrink-0">
+                            <div class="w-full">
+                                <h4 class="text-xl font-bold text-brand-purple mb-3">Suchitra Barman (Age 35)</h4>
+                                <div class="space-y-3 text-gray-800 text-sm">
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Challenges:</strong> <span data-lang-key="int3_a1">Juggling work and home, and being spoken down to for being a cleaner.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Rights Awareness:</strong> <span data-lang-key="int3_a2">I learn from friends, but wish there was one place for all information.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Digital Use:</strong> <span data-lang-key="int3_a3">I have a phone, but prefer videos over reading.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> Role Model:</strong> <span data-lang-key="int3_a4">A girl from my village who became a teacher, proving we can do anything.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Needs:</strong> <span data-lang-key="int3_a5">Simple explanations of legal rights, success stories of other women, and self-help ways.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Interview 4: Lolita Rabha -->
+                        <div class="bg-brand-pink/30 border border-brand-light-purple rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-start">
+                            <img src="https://placehold.co/150x150/7E22CE/FFF?text=Lolita" alt="Lolita Rabha" class="w-20 h-20 rounded-full object-cover border-2 border-brand-purple flex-shrink-0">
+                            <div class="w-full">
+                                <h4 class="text-xl font-bold text-brand-purple mb-3">Lolita Rabha (Age 41)</h4>
+                                <div class="space-y-3 text-gray-800 text-sm">
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Challenges:</strong> <span data-lang-key="int4_a1">Fear of health issues, lack of time for self, and being talked down to.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Rights Awareness:</strong> <span data-lang-key="int4_a2">Mostly gossip or friends; rarely official information.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Digital Use:</strong> <span data-lang-key="int4_a3">No, English is difficult. Assamese would be helpful.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> Role Model:</strong> <span data-lang-key="int4_a4">My elder sister who went back to school after marriage to earn for the family.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Needs:</strong> <span data-lang-key="int4_a5">Direct contacts and easy ways to talk about problems anonymously.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Interview 5: Rumi Deka -->
+                        <div class="bg-brand-pink/30 border border-brand-light-purple rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-start">
+                            <img src="https://placehold.co/150x150/7E22CE/FFF?text=Rumi" alt="Rumi Deka" class="w-20 h-20 rounded-full object-cover border-2 border-brand-purple flex-shrink-0">
+                            <div class="w-full">
+                                <h4 class="text-xl font-bold text-brand-purple mb-3">Rumi Deka (Age 29)</h4>
+                                <div class="space-y-3 text-gray-800 text-sm">
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Challenges:</strong> <span data-lang-key="int5_a1">Low salary, not being taken seriously, and managing kids with work.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Rights Awareness:</strong> <span data-lang-key="int5_a2">Mostly from other workers during breaks.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Digital Use:</strong> <span data-lang-key="int5_a3">I would love to use one if it's easy and in Assamese.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> Role Model:</strong> <span data-lang-key="int5_a4">My aunt who started a small shop after her husband left; she is brave and independent.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Needs:</strong> <span data-lang-key="int5_a5">A website explaining basic rights, health, with support contacts and more stories from women like us.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: STUDENT INTERVIEWS -->
+                <div>
+                    <h3 class="text-2xl font-bold text-brand-dark mb-6 border-b-2 border-brand-light-purple pb-2 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-brand-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                            <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                        </svg>
+                        Voices from Students
+                    </h3>
+                    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                         <!-- Interview 6: Priyanka Sharma -->
+                        <div class="bg-brand-pink/30 border border-brand-light-purple rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-start">
+                            <img src="https://placehold.co/150x150/7E22CE/FFF?text=Priyanka" alt="Priyanka Sharma" class="w-20 h-20 rounded-full object-cover border-2 border-brand-purple flex-shrink-0">
+                            <div class="w-full">
+                                <h4 class="text-xl font-bold text-brand-purple mb-3">Priyanka Sharma</h4>
+                                <div class="space-y-3 text-gray-800 text-sm">
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Challenges:</strong> <span data-lang-key="stu1_a1">Unspoken barriers in technical groups; late nights can feel intimidating.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Rights Awareness:</strong> <span data-lang-key="stu1_a2">Mostly through word of mouth or WhatsApp; not everyone checks official sites.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Digital Use:</strong> <span data-lang-key="stu1_a3">Yes, Instagram and Telegram for women in STEM. Campus info in one place would help.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> Role Model:</strong> <span data-lang-key="stu1_a4">Elder cousin in AI research, showing confidence in male-dominated fields.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Ideas:</strong> <span data-lang-key="stu1_a5">Open forums, stronger mentorship, and an Assamese-language platform.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Interview 7: Sana Ahmed -->
+                        <div class="bg-brand-pink/30 border border-brand-light-purple rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-start">
+                            <img src="https://placehold.co/150x150/7E22CE/FFF?text=Sana" alt="Sana Ahmed" class="w-20 h-20 rounded-full object-cover border-2 border-brand-purple flex-shrink-0">
+                            <div class="w-full">
+                                <h4 class="text-xl font-bold text-brand-purple mb-3">Sana Ahmed</h4>
+                                <div class="space-y-3 text-gray-800 text-sm">
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Challenges:</strong> <span data-lang-key="stu2_a1">Subtle gender bias in group projects or lab work.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Rights Awareness:</strong> <span data-lang-key="stu2_a2">Know about ICC/WDC, but activities aren't always well-publicized.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Digital Use:</strong> <span data-lang-key="stu2_a3">Blogs, YouTube for success stories, and Quora for queries.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> Role Model:</strong> <span data-lang-key="stu2_a4">School teacher who set up a girls' science club and broke stereotypes.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Ideas:</strong> <span data-lang-key="stu2_a5">Anonymous chat, up-to-date event info, and personal stories in Assamese/English.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Interview 8: Ananya Borthakur -->
+                        <div class="bg-brand-pink/30 border border-brand-light-purple rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-start">
+                            <img src="https://placehold.co/150x150/7E22CE/FFF?text=Ananya" alt="Ananya Borthakur" class="w-20 h-20 rounded-full object-cover border-2 border-brand-purple flex-shrink-0">
+                            <div class="w-full">
+                                <h4 class="text-xl font-bold text-brand-purple mb-3">Ananya Borthakur</h4>
+                                <div class="space-y-3 text-gray-800 text-sm">
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Challenges:</strong> <span data-lang-key="stu3_a1">Stereotypical remarks; women sometimes not expected to lead research teams.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Rights Awareness:</strong> <span data-lang-key="stu3_a2">Orientation sessions help, but regular reminders would be better.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Digital Use:</strong> <span data-lang-key="stu3_a3">LinkedIn, email newsletters, and academic mailing lists for gender in science.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> Role Model:</strong> <span data-lang-key="stu3_a4">Dr. Tessy Thomas, proving leadership is about skill, not gender.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Ideas:</strong> <span data-lang-key="stu3_a5">Give space to lesser-heard voices (Northeast communities, support staff) in local languages.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Interview 9: Esha Das -->
+                        <div class="bg-brand-pink/30 border border-brand-light-purple rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-start">
+                            <img src="https://placehold.co/150x150/7E22CE/FFF?text=Esha" alt="Esha Das" class="w-20 h-20 rounded-full object-cover border-2 border-brand-purple flex-shrink-0">
+                            <div class="w-full">
+                                <h4 class="text-xl font-bold text-brand-purple mb-3">Esha Das</h4>
+                                <div class="space-y-3 text-gray-800 text-sm">
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Challenges:</strong> <span data-lang-key="stu4_a1">Ideas in groups taken less seriously; poor representation in tech clubs.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Rights Awareness:</strong> <span data-lang-key="stu4_a2">Aware, but scope for better visibility; notices often missed.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Digital Use:</strong> <span data-lang-key="stu4_a3">Follows women designers on Instagram/YouTube for inspiration.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> Role Model:</strong> <span data-lang-key="stu4_a4">Mother, who started studying again after marriage and now teaches.</span></p>
+                                    <p><strong class="text-brand-dark flex items-center"><svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Ideas:</strong> <span data-lang-key="stu4_a5">Resources in Assamese/Hindi, campus design stories, and easy anonymous reporting.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =========== FOOTER =========== -->
+    <footer class="bg-brand-dark text-white mt-12 py-8 px-4">
+        <div class="container mx-auto text-center md:text-left">
+            <div class="md:flex md:justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h4 class="text-lg font-bold" data-lang-key="footer_project_title">B.Tech Project</h4>
+                    <p class="text-sm text-gray-400" data-lang-key="footer_project_desc">
+                        Digital Platforms for Gender Awareness in Assam
+                    </p>
+                </div>
+                <div class="mb-6 md:mb-0">
+                    <h4 class="text-lg font-bold" data-lang-key="footer_guide_title">Under the guidance of</h4>
+                    <p class="text-sm text-gray-400" data-lang-key="footer_guide_name">
+                        Professor Rituparna Patgiri
+                    </p>
+                    <p class="text-sm text-gray-400" data-lang-key="footer_guide_dept">
+                        Dept. of Humanities and Social Sciences, IIT Guwahati
+                    </p>
+                </div>
+                <!-- New section for the student -->
+                <div class="mb-6 md:mb-0">
+                    <h4 class="text-lg font-bold" data-lang-key="footer_developer_title">Created By</h4>
+                    <p class="text-sm text-gray-400" data-lang-key="footer_developer_name">
+                        Neha Nayan
+                    </p>
+                    <p class="text-sm text-gray-400" data-lang-key="footer_developer_roll">
+                        Roll No: 220122038
+                    </p>
+                    <p class="text-sm text-gray-400" data-lang-key="footer_developer_dept">
+                        B.Tech, Chemical Science and Technology Dept.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold" data-lang-key="footer_website_title">Website</h4>
+                    <p class="text-sm text-gray-400" data-lang-key="footer_website_name">
+                        Raising Strong Daughters
+                    </p>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-6 text-center text-sm text-gray-500">
+                <p>&copy; 2025. This website is a part of an academic project.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- =========== JAVASCRIPT LOGIC =========== -->
+    <script>
+        // --- 1. LANGUAGE TRANSLATION DATA ---
+        // All bilingual text content is stored here.
+        // Adding new text requires adding a key here and a `data-lang-key` attribute in the HTML.
+        const translations = {
+            as: { // Assamese
+                title: "Raising Strong Daughters | সবল কন্যা গঢ়ি তোলা",
+                nav_title: "সবল কন্যা গঢ়ি তোলা",
+                marquee_welcome: "\"সবল কন্যা গঢ়ি তোলা\" ৱেবছাইটলৈ আপোনাক স্বাগতম।",
+                nav_home: "প্রথম পৃষ্ঠা",
+                nav_about: "আমাৰ বিষয়ে",
+                nav_learning: "শিক্ষা",
+                nav_stories: "কাহিনী",
+                nav_resources: "সম্পদ",
+                nav_interactive: "মতামত",
+                nav_translate: "অনুবাদ",
+                hero_title: "নাৰী শক্তিৰে অসমৰ নৱনিৰ্মাণ",
+                hero_subtitle: "এক সমতাপূৰ্ণ আৰু উজ্জ্বল ভৱিষ্যতৰ বাবে আগবাঢ়ি আহক। জ্ঞান, কাহিনী আৰু সমাজৰ সহযোগত আমি এনে এক ডিজিটেল মঞ্চ গঢ়ি তুলিছোঁ, য’ত অসমৰ প্ৰতিগৰাকী নাৰীয়ে স্বাভিমানৰ সপোন দেখিব পাৰে।",
+                hero_cta: "আৰম্ভ কৰক",
+                mission_title: "আমাৰ লক্ষ্য",
+                mission_text: "\"Raising Strong Daughters\" হৈছে অসমৰ মহিলা আৰু জীয়ৰীসকলৰ বাবে এক আশাৰ বন্তি। আমি জ্ঞান আৰু অনুপ্ৰেৰণাৰ এক ডিজিটেল আশ্ৰয়স্থল গঢ়ি তুলিছোঁ—য'ত অধিকাৰ আৰু স্বাস্থ্যৰ গুৰুত্বপূৰ্ণ তথ্যৰ লগতে আমাৰ নিজৰ সমাজৰ শক্তিশালী কাহিনীসমূহো উপলব্ধ। চাহ বাগিচাৰ পৰা আৰম্ভ কৰি প্ৰযুক্তি জগতলৈকে সকলোৰে কণ্ঠক সংযোগ কৰি আমি মৌনতা ভংগ কৰিবলৈ আৰু সহায়ৰ সাঁকো গঢ়িবলৈ প্ৰচেষ্টা চলাইছোঁ। আমাৰ লক্ষ্য সৰল অথচ গভীৰ: এখন এনে সমাজ গঢ়া য'ত লিংগ সমতা এক স্বাভাৱিক নিয়ম, আৰু প্ৰতিগৰাকী ছোৱালীৰ হাতত নিজৰ ভাগ্য গঢ়াৰ আহিলা থাকে। আহক, আমি সজাগথাক কৰ্মলৈ ৰূপান্তৰিত কৰোঁ আৰু সকলোৰে বাবে আশা, মৰ্যাদা আৰু অসীম সম্ভাৱনাৰে ভৰা এক ভৱিষ্যত সৃষ্টি কৰোঁ।",
+                about_title: "মোৰ প্ৰেৰণা",
+                about_prof_intro: "এই প্ৰকল্পটো মোৰ বাবে অত্যন্ত ব্যক্তিগত, যিটো গঢ় লৈ উঠিছে মোৰ গুৰু, আই.আই.টি. গুৱাহাটীৰ মানৱীয় আৰু সমাজ বিজ্ঞান বিভাগৰ অধ্যাপক ৰিতুপৰ্ণা পাটগিৰিৰ গভীৰ প্ৰভাৱৰ ফলত। 'লিংগ, মিডিয়া, আৰু ডিজিটেল সমাজ'ৰ ওপৰত তেখেতৰ অগ্ৰণী গৱেষণা মোৰ বাবে কেৱল এক শৈক্ষিক তথ্য নহয়; ই বিশ্বক চোৱাৰ মোৰ দৃষ্টিভংগী সলনি কৰি দিছে।",
+                about_prof_focus: "\"তেখেতৰ তত্ত্বাৱধানত কাম কৰি মই উপলব্ধি কৰিলোঁ যে প্ৰযুক্তি কেৱল কোড বা সংযোগৰ বিষয় নহয়—ই সামাজিক পৰিৱৰ্তনৰ এক গুৰুত্বপূৰ্ণ স্থান। অধ্যাপক পাটগিৰিৰ অন্তৰ্দৃষ্টিয়ে মোক দেখুৱাই দিছিল যে ডিজিটেল প্লেটফৰ্মবোৰে কেনেকৈ সামাজিক পৰিৱৰ্তনৰ শক্তিশালী ইঞ্জিন হ'ব পাৰে। তেখেতৰ কামেই মোক এই কথা বুজাই দিছিল যে এখন ৱেবছাইট কেৱল তথ্যতকৈও অধিক হ'ব পাৰে; ই অসমত লিংগ সজাগতাৰ বাবে এক সৱলীকৰণৰ আহিলা হ'ব পাৰে।\"",
+                about_prof_conclusion: "এই প্ৰকল্পটো তেখেতৰ নিৰ্দেশনাৰ এক প্ৰমাণ, যিয়ে মোক ইঞ্জিনিয়াৰিংৰ কাৰিকৰী দিশৰ বাহিৰলৈ গৈ স্ক্ৰীণৰ আঁৰৰ মানৱীয় কাহিনীোৰক চাবলৈ শিকাইছে। আমাৰ ডিজিটেল যুগত লিংগৰ সূক্ষ্মতা বুজিবলৈ তেখেতৰ নিষ্ঠাই মোক 'Raising Strong Daughters' গঢ়িবলৈ অনুপ্ৰাণিত কৰিছে—কেৱল এক প্ৰকল্প হিচাপে নহয়, বৰঞ্চ তেখেতে কল্পনা কৰা সমতাপূৰ্ণ সমাজখনলৈ বৰঙণি আগবঢ়োৱাৰ এক আন্তৰিক প্ৰচেষ্টা হিচাপে।",
+                about_collab_title: "আমাৰ সহযোগী সংস্থাসমূহ",
+                about_collab_intro: "আমি অসমত লিংগ সমতা আৰু সামাজিক অন্তৰ্ভুক্তিৰ বাবে কাম কৰি থকা কেইবাটাও সক্ৰিয় আঞ্চলিক সংস্থাৰ সৈতে সংযুক্ত:",
+                ngo1_name: "Akam Foundation",
+                ngo1_desc: "যুৱ সবলীকৰণ আৰু সামূহিক বিকাশত কেন্দ্ৰিত এক আগশাৰীৰ সংস্থা, যি আমাৰ লিংগ সজাগতাৰ লক্ষ্যৰ সৈতে জড়িত।",
+                ngo2_name: "Rural Women Upliftment Association (RWUAANGO)",
+                ngo2_desc: "গ্ৰাম্য মহিলাসকলৰ উত্তৰণৰ বাবে সমৰ্পিত, তেওঁলোকৰ জীৱিকা আৰু স্বাস্থ্যৰ কামে আমাৰ অভিযানক পোনপটীয়াকৈ সমৰ্থন কৰে।",
+                ngo3_name: "Women’s Development Centre, Guwahati",
+                ngo3_desc: "এক মুখ্য সম্পদ কেন্দ্ৰ যি সমৰ্থন আৰু পৰামৰ্শ প্ৰদান কৰে, মহিলাৰ সুৰক্ষা আৰু বিকাশৰ বাবে আমাৰ নেটৱৰ্ক বৃদ্ধি কৰে।",
+                learning_title: "শিক্ষা আৰু সজাগতা প'ৰ্টেল",
+                learn1_title_as: "লিংগ অধিকাৰ আৰু সমতা",
+                learn1_title_en: "Gender Rights and Equality",
+                learn1_content: "লিংগ সমতা মানে কেৱল মহিলাৰ অধিকাৰ নহয়, ই পুৰুষ আৰু মহিলা উভয়েই সমান সুযোগ, অধিকাৰ আৰু দায়িত্ব পোৱাটো নিশ্চিত কৰে। ভাৰtীয় সংবিধানৰ অনুচ্ছেদ ১৪, ১৫, আৰু ২১-এ সমতা আৰু মৰ্যাদাৰ অধিকাৰ প্ৰদান কৰে। এই শিতানত, আমি এই অধিকাৰসমূহ আৰু দৈনন্দিন জীৱনত ইয়াৰ প্ৰয়োগৰ বিষয়ে আলোচনা কৰিম।",
+                learn2_title_as: "ছোৱালীৰ স্বাস্থ্য, পৰিচ্ছন্নতা আৰু শিক্ষা",
+                learn2_title_en: "Health, Hygiene, and Education for Girls",
+                learn2_content: "এগৰাকী শিক্ষিত আৰু স্বাস্থ্যৱান ছোৱালীয়েই এখন সুস্থ সমাজৰ ভেটি। এই শিতানত মাহেকীয়া স্বাস্থ্য (menstrual hygiene), পুষ্টি, আৰু মানসিক স্বাস্থ্যৰ গুৰুত্ব সম্পৰ্কে আলোচনা কৰা হৈছে। শিক্ষাৰ জৰিয়তে ছোৱালী এজনী কেনেদৰে স্বাৱলম্বী হ'b পাৰে, তাৰ বিষয়েও ইয়াত তথ্য দিয়া হৈছে।",
+                learn3_title_as: "মিডিয়া, কলা, আৰু উদ্যোগ",
+                learn3_title_en: "Women in Media, Arts, and Entrepreneurship",
+                learn3_content: "মিডিয়া আৰু কলাই সমাজৰ ধাৰণা গঢ়ি তোলে। এই শিতানত আমি অসমৰ মহিলাসকলে কেনেদৰে কলা, সাহিত্য, আৰু মিডিয়াত অৱদান আগবঢ়াইছে, সেই বিষয়ে জানিম। ইয়াৰ উপৰিও, মহিলা উদ্যোগীসকলৰ বাবে থকা সুযোগ আৰু তেওঁলোকৰ সফলতাক আমি উদযাপন কৰিম।",
+                learn4_title_as: "অসমৰ মহিলা স্বাধীনতা সংগ্ৰামী",
+                learn4_title_en: "Female Freedom Fighters of Assam",
+                fighter1_name: "কনকলতা বৰুৱা",
+                fighter1_desc: "'বীৰবালা' নামেৰে জনাজাত, তেওঁ এগৰাকী অসমীয়া স্বাধীনতা সংগ্ৰামী আছিল যিয়ে ভাৰত ত্যাগ আন্দোলনৰ সময়ত 'মৃত্যু বাহিনী'ৰ নেতৃত্ব দিছিল। গহপুৰ আৰক্ষী থানাত ভাৰতীয় পতাকা উত্তোলন কৰিবলৈ চেষ্টা কৰোঁতে মাত্ৰ ১৭ বছৰ বয়সতে তেওঁ শ্বহীদ হৈছিল।",
+                fighter2_name: "ভোগেশ্বৰী ফুকননী",
+                fighter2_desc: "ভাৰত ত্যাগ আন্দোলনৰ নগাঁও, অসমৰ এগৰাকী বিশিষ্ট ব্যক্তি। এটা শোভাযাত্ৰাৰ সময়ত ভাৰতীয় পতাকাৰ মৰ্যাদা ৰক্ষা কৰিবলৈ চেষ্টা কৰোঁতে ব্ৰিটিছ আৰক্ষীয়ে তেওঁক গুলীয়াই হত্যা কৰিছিল। তেতিয়া তেওঁৰ বয়স আছিল ৬০ বছৰ।",
+                fighter3_name: "চন্দ্ৰপ্ৰভা শইকীয়ানী",
+                fighter3_desc: "এগৰাকী অগ্নিকন্যা সমাজ সংস্কাৰক, লেখিকা আৰু স্বাধীনতা সংগ্ৰামী। তেওঁ সদৌ অসম প্ৰাদেশিক মহিলা সমিতিৰ প্ৰতিষ্ঠাপক আছিল আৰু অসহযোগ আন্দোলনৰ এগৰাকী নেত্ৰী হিচাপে জাতি-ভেদৰ বিৰুদ্ধে আৰু মহিলাৰ অধিকাৰৰ বাবে যুঁজ দিছিল।",
+                fighter4_name: "পুষ্পলতা দাস",
+                fighter4_desc: "এগৰাকী গান্ধীवादी স্বাধীনতা সংগ্ৰামী, সমাজকৰ্মী আৰু সাংসদ। তেওঁ 'মৃত্যু বাহিনী'ৰ এগৰাকী নেত্ৰী আছিল আৰু ভাৰত ত্যাগ আন্দোলনৰ সময়ত কাৰাবাস খাটিছিল। পিছলৈ তেওঁ ৰাজ্যসভাৰ সদস্য হৈ সমাজ সেৱা অব্যাহত ৰাখিছিল।",
+                fighter5_name: "নলিনীবালা দেৱী",
+                fighter5_desc: "এগৰাকী বিশিষ্ট অসমীয়া কবি আৰু লেখিকা, তেওঁ স্বাধীনতা আন্দোলনতো সক্ৰিয়ভাৱে জড়িত আছিল। তেওঁৰ দেশপ্ৰেমমূলক কবিতা আৰু লেখাৰ জৰিয়তে তেওঁ বহু লোকক অসহযোগ আন্দোলনত যোগদান কৰিবলৈ আৰু স্বাধীনতাৰ বাবে যুঁজিবলৈ অনুপ্ৰাণিত কৰিছিল।",
+                stories_title: "কাহিনী আৰু কণ্ঠস্বৰ",
+                stories_intro: "অসমৰ বিভিন্ন কোণৰ পৰা মহিলাসকলৰ শক্তি আৰু সফলতাৰ কাহিনী। আপোনাৰ নিজৰ কাহিনীও আমালৈ পঠাওক!",
+                story1_title: "গাওঁখনৰ পৰিৱৰ্তন",
+                story1_desc: "শিৱসাগৰৰ এগৰাকী মহিলাই কেনেদৰে এটা আত্ম-সহায়ক গোট আৰম্ভ কৰি নিজৰ গাওঁখনৰ মহিলাসকলক স্বাৱলম্বী কৰি তুলিলে।",
+                story2_title: "স্থানীয় কাহিনী",
+                story2_desc: "মহিলাসকলৰ জীৱন আৰু তেওঁলোকে সন্মুখীন হোৱা প্ৰত্যাহ্বানৰ বিষয়ে।",
+                story3_title: "আপোনাৰ কাহিনী ইয়াত দিয়ক",
+                story3_desc: "তলৰ 'Interactive' শিতানলৈ গৈ আপোনাৰ অভিজ্ঞতা আমাক জনাওক।",
+                resources_title: "সম্পদ আৰু সহায়",
+                resources_helplines_title: "জৰুৰীকালীন হেল্পলাইন",
+                helpline1_name: "মহিলা হেল্পলাইন:",
+                helpline2_name: "শিশু হেল্পলাইন:",
+                helpline3_name: "আৰক্ষী:",
+                resources_guides_title: "Downloadable Guides (Assamese)",
+                guide1: "চৰকাৰী আঁচনিসমূহৰ হাতপুথি",
+                guide2: "ছোৱালীৰ শিক্ষাৰ বাবে পঞ্জীয়ন",
+                resources_ngo_title: "স্থানীয় সহায়ক গোট আৰু NGO",
+                resources_ngo_desc: "আমাৰ 'About' পৃষ্ঠাত উল্লেখ কৰা সংস্থাসমূহৰ উপৰিও, আপোনাৰ ওচৰৰ স্থানীয় আত্ম-সহায়ক গোট (SHG) আৰু বেচৰকাৰী সংস্থাসমূহৰ সৈতে যোগাযোগ কৰক।",
+                resources_ngo_link: "আমাৰ সহযোগী আৰু সংবদ্ধ সংস্থাসমূহৰ বিষয়ে জানক &rarr;",
+                interactive_title: "মতামত আৰু সজাগতা কুইজ",
+                quiz_title: "সজাগতা কুইজ",
+                quiz_q1: "Q1: ভাৰতত মহিলা হেল্পলাইন নম্বৰ কি?",
+                quiz_q2: "Q2: কোনটো অনুচ্ছেদে সমতাৰ অধিকাৰ নিশ্চিত কৰে?",
+                quiz_submit: "দাখিল কৰক",
+                quiz_correct: "শুদ্ধ! আপুনি সজাগ।",
+                quiz_incorrect: "অশুদ্ধ। শুদ্ধ উত্তৰবোৰ হ'ল 181 আৰু Article 14। শিকি থাকক!",
+                feedback_title: "মতামত বা কাহিনী দিয়ক",
+                feedback_intro: "আপোনাৰ মতামত, প্ৰশ্ন, বা আপোনাৰ নিজৰ কাহিনী আমালৈ পঠাওক।",
+                form_name: "নাম",
+                form_email: "ইমেইল (Optional)",
+                form_message: "মতামত / কাহিনী",
+                form_submit: "মতামত দাখিল কৰক",
+                form_success: "ধন্যবাদ! আপোনাৰ মতামত লাভ কৰা হ'ল।",
+                footer_project_title: "B.Tech Project",
+                footer_project_desc: "অসমত লিংগ সজাগতাৰ বাবে ডিজিটেল মঞ্চ",
+                footer_guide_title: "পথ প্ৰদৰ্শনত",
+                footer_guide_name: "অধ্যাপক ৰিতুপৰ্ণা পাটগিৰি",
+                footer_guide_dept: "মানৱীয় আৰু সমাজ বিজ্ঞান বিভাগ, আই.আই.টি. গুৱাহাটী",
+                footer_developer_title: "নিৰ্মাণ",
+                footer_developer_name: "নেহা নয়ন",
+                footer_developer_roll: "ৰোল নং: 220122038",
+                footer_developer_dept: "বি.টেক, ৰাসায়নিক বিজ্ঞান আৰু প্ৰযুক্তিবিদ্যা বিভাগ",
+                footer_website_title: "ৱেবছাইট",
+                footer_website_name: "সবল কন্যা গঢ়ি তোলা",
+                back_home: "প্ৰথম পৃষ্ঠালৈ উভতি যাওক",
+                back_stories: "কাহিনী পৃষ্ঠালৈ উভতি যাওক",
+                interviews_title: "স্থানীয় কণ্ঠ: আই.আই.টি. গুৱাহাটীৰ পৰা সাক্ষাৎকাৰ",
+                interviews_intro: "আমি কেম্পাছত কৰ্মৰত মহিলা আৰু ছাত্ৰীসকলৰ সৈতে তেওঁলোকৰ অভিজ্ঞতা, প্ৰত্যাহ্বান আৰু ভৱিষ্যতৰ আশাৰ বিষয়ে কথা পাতিছিলো।",
+                
+                // --- Assamese Translations for Staff Interviews ---
+                int1_a1: "মোৰ কাম বৰ সোনকালে আৰম্ভ হয় আৰু পলমকৈ শেষ হয়। ঘৰত মই সকলো চম্ভালিব লগা হয়। কেতিয়াবা, কেৱল মই এগৰাকী মহিলা হোৱাৰ বাবে মানুহে মোৰ কামক সন্মান নকৰে।",
+                int1_a2: "মই জ্যেষ্ঠ মহিলাসকল আৰু ইউনিয়নৰ পৰা অলপ-চৰপ জানো।",
+                int1_a3: "মই ফোন কৰিবলৈ আৰু হোৱাটছএপৰ বাবে মোবাইল ব্যৱহাৰ কৰোঁ। যদি অসমীয়াত কোনো অনলাইন প্লেটফৰ্ম থাকে, তেন্তে মই চেষ্টা কৰি চাম।",
+                int1_a4: "মোৰ মা, যিয়ে পথাৰত কাম কৰি আমাক অকলে ডাঙৰ-দীঘল কৰিছিল।",
+                int1_a5: "স্বাস্থ্য, সঞ্চয়, আৰু বিপদত পৰিলে ক'লৈ যাব লাগে তাৰ তথ্য। সৰল অডিঅ'/ভিডিঅ' বাৰ্তা হ'লে আটাইতকৈ ভাল।",
+                
+                int2_a1: "কঠোৰ পৰিশ্ৰমৰ মূল্য দিয়া নহয়, পুৰুষৰ পৰা অশালীন মন্তব্য, আৰু ঘৰত সম্পূৰ্ণ দায়িত্ব।",
+                int2_a2: "মই কেৱল সময়মতে দৰমহা পোৱাৰ বিষয়ে জানো, সুৰক্ষা বা ছুটীৰ বিষয়ে বেছি নাজানো।",
+                int2_a3: "ভাষা এটা সমস্যা। অসমীয়া ভাষাত সহায়ক ৱেবছাইট হ'লে ভাল হ'ব।",
+                int2_a4: "হোষ্টেলৰ এগৰাকী মেডাম যিয়ে আমাৰ কথা শুনে, সহায় কৰে আৰু ন্যায়ৰ বাবে থিয় দিয়ে।",
+                int2_a5: "আমাৰ ভাষাত পোনপটীয়া হেল্পলাইন নম্বৰ আৰু আমাৰ সমস্যাবোৰ শুনিবলৈ কোনোবা এজন।",
+
+                int3_a1: "কাম আৰু ঘৰ দুয়োটা চম্ভালিব লগা হয়, আৰু চাফাই কৰ্মী হোৱাৰ বাবে কেতিয়াবা অপমানিত হ'ব লগা হয়।",
+                int3_a2: "মই বন্ধু-বান্ধৱৰ পৰা জানিব পাৰোঁ, কিন্তু সকলো তথ্য একে ঠাইতে পোৱা হ'লে ভাল আছিল।",
+                int3_a3: "মোৰ ফোন আছে, কিন্তু পঢ়াতকৈ ভিডিঅ' চোৱাটো বেছি ভাল পাওঁ।",
+                int3_a4: "মোৰ গাঁৱৰ এগৰাকী ছোৱালী যি শিক্ষয়িত্ৰী হৈছিল, তেওঁ প্ৰমাণ কৰিছিল যে আমি যিকোনো কাম কৰিব পাৰোঁ।",
+                int3_a5: "আইনী অধিকাৰৰ সৰল ব্যাখ্যা, অন্য মহিলাৰ সফলতাৰ কাহিনী, আৰু স্বাৱলম্বী হোৱাৰ উপায়।",
+
+                int4_a1: "স্বাস্থ্যজনিত সমস্যাৰ ভয়, নিজৰ বাবে সময়ৰ অভাৱ, আৰু কামত অপমানিত হোৱা।",
+                int4_a2: "বেছিভাগ উৰাবাতৰি বা বন্ধুৰ পৰা; চৰকাৰী তথ্য খুব কমেইহে পাওঁ।",
+                int4_a3: "নাই, ইংৰাজী বুজিবলৈ টান। অসমীয়া হ'লে সহায় হ'ব।",
+                int4_a4: "মোৰ বায়েক, যিয়ে বিয়াৰ পিছত পৰিয়ালৰ বাবে উপাৰ্জন কৰিবলৈ পুনৰ স্কুললৈ গৈছিল।",
+                int4_a5: "পোনপটীয়া যোগাযোগ নম্বৰ আৰু গোপনে সমস্যাৰ বিষয়ে কথা পতাৰ সহজ উপায়।",
+
+                int5_a1: "কম দৰমহা, গুৰুত্ব নিদিয়া, আৰু কামৰ সৈতে ল'ৰা-ছোৱালীক চম্ভালাটো কঠিন।",
+                int5_a2: "বেছিভাগ বিৰতিৰ সময়ত অন্য কৰ্মীসকলৰ পৰা জানিব পাৰোঁ।",
+                int5_a3: "যদি সহজ হয় আৰু অসমীয়াত থাকে, তেন্তে মই ব্যৱহাৰ কৰিবলৈ ভাল পাম।",
+                int5_a4: "মোৰ খুৰী, যিয়ে স্বামীয়ে এৰি যোৱাৰ পিছত এখন সৰু দোকান আৰম্ভ কৰিছিল; তেওঁ সাহসী আৰু স্বনিৰ্ভৰশীল।",
+                int5_a5: "মৌলিক অধিকাৰ, স্বাস্থ্য, সহায়ৰ যোগাযোগ নম্বৰ আৰু আমাৰ দৰে মহিলাৰ অধিক কাহিনী থকা এটা ৱেবছাইট।",
+
+                // --- Assamese Translations for Student Interviews ---
+                stu1_a1: "কাৰিকৰী গোটবোৰত এক অকথিত বাধা থাকে; পলমকৈ ৰাতি হোৱাটো কেতিয়াবা ভয়ংকৰ যেন লাগে।",
+                stu1_a2: "বেছিভাগ মুখৰ কথা বা হোৱাটছএপৰ জৰিয়তে জানো; সকলোৱে সদায় চৰকাৰী ছাইটবোৰ চাই নাথাকে।",
+                stu1_a3: "হয়, বিজ্ঞান শাখাত থকা মহিলাসকলৰ বাবে ইনষ্টাগ্ৰাম আৰু টেলিগ্ৰাম ব্যৱহাৰ কৰোঁ। কেম্পাছৰ তথ্য একে ঠাইতে পালে সুবিধা হ'ব।",
+                stu1_a4: "AI গৱেষণাত থকা মোৰ জ্যেষ্ঠ ভগ্নী, যিয়ে পুৰুষ-প্ৰধান ক্ষেত্ৰত আত্মবিশ্বাস দেখুৱাইছে।",
+                stu1_a5: "মুকলি আলোচনা চক্ৰ, শক্তিশালী মেন্টৰশ্বিপ, আৰু এটা অসমীয়া ভাষাৰ প্লেটফৰ্ম।",
+
+                stu2_a1: "গোটৰ প্ৰকল্প বা লেবৰ কামত সূক্ষ্ম লিংগ বৈষম্য।",
+                stu2_a2: "ICC/WDC ৰ বিষয়ে জানো, কিন্তু তেওঁলোকৰ কাৰ্য্যকলাপ সদায় ভালদৰে প্ৰচাৰ কৰা নহয়।",
+                stu2_a3: "সফলতাৰ কাহিনীৰ বাবে ব্লগ, ইউটিউব চাওঁ আৰু প্ৰশ্নৰ বাবে Quora ব্যৱহাৰ কৰোঁ।",
+                stu2_a4: "মোৰ স্কুলৰ শিক্ষয়িত্ৰী যিয়ে ছোৱালীৰ বাবে বিজ্ঞান ক্লাব খুলিছিল আৰু পুৰণি নিয়ম ভাঙিছিল।",
+                stu2_a5: "বেনামী চেট, ইভেন্টৰ শেহতীয়া তথ্য, আৰু অসমীয়া/ইংৰাজীত ব্যক্তিগত কাহিনী।",
+
+                stu3_a1: "পুৰণি কালৰ মন্তব্য; কেতিয়াবা মহিলাসকলক গৱেষণা দলৰ নেতৃত্ব দিবলৈ আশা কৰা নহয়।",
+                stu3_a2: "অৰিয়েণ্টেচন শেশনে সহায় কৰে, কিন্তু নিয়মীয়াকৈ মনত পেলাই দিলে ভাল হ'ব।",
+                stu3_a3: "বিজ্ঞানত লিংগ সমতাৰ বাবে LinkedIn, ইমেইল নিউজলেটাৰ আৰু একাডেমিক মেইলিং লিষ্ট ব্যৱহাৰ কৰোঁ।",
+                stu3_a4: "ড০ টেছি থমাছ, যিয়ে প্ৰমাণ কৰিছে যে নেতৃত্ব দক্ষতাৰ ওপৰত নিৰ্ভৰ কৰে, লিংগৰ ওপৰত নহয়।",
+                stu3_a5: "স্থানীয় ভাষাত কমকৈ শুনা মাতবোৰক (উত্তৰ-পূবৰ সম্প্ৰদায়, সহায়ক কৰ্মী) স্থান দিয়া।",
+
+                stu4_a1: "গোটত দিয়া ধাৰণাবোৰক কম গুৰুত্ব দিয়া হয়; টেক ক্লাববোৰত প্ৰতিনিধিত্ব কম।",
+                stu4_a2: "জানো, কিন্তু ইয়াক আৰু বেছি দৃশ্যমান কৰাৰ প্ৰয়োজন আছে; জাননীবোৰ প্ৰায়ে চকুত নপৰে।",
+                stu4_a3: "প্ৰেৰণাৰ বাবে ইনষ্টাগ্ৰাম/ইউটিউবত মহিলা ডিজাইনাৰসকলক অনুসৰণ কৰোঁ।",
+                stu4_a4: "মোৰ মা, যিয়ে বিয়াৰ পিছত পুনৰ পঢ়া আৰম্ভ কৰিছিল আৰু এতিয়া শিক্ষকতা কৰে।",
+                stu4_a5: "অসমীয়া/হিন্দীত সম্পদ, কেম্পাছৰ ডিজাইনৰ কাহিনী, আৰু সহজে বেনামী অভিযোগ দিয়াৰ ব্যৱস্থা।",
+
+
+                bhogeswari_title: "শ্বহীদ ভোগেশ্বৰী ফুকননী: ১৯৪২ চনৰ ভাৰত ত্যাগ আন্দোলনৰ সিংহী",
+                bhogeswari_p1: "ভাৰতৰ স্বাধীনতা সংগ্ৰামৰ মহান ইতিহাসত বহুতো বিশিষ্ট নেতাৰ নাম জনাজাত। কিন্তু এই স্বাধীনতাৰ ভেটি গঢ়ি উঠিছিল অগণন অচিনাকি বীৰ-বীৰাংগনাৰ ত্যাগৰ ওপৰত। তেনে এগৰাকী মহান ব্যক্তি হ'ল অসমৰ বীৰাংগনা শ্বহীদ ভোগেশ্বৰী ফুকননী, যিয়ে ৬০ বছৰ বয়সত দেশৰ সন্মানৰ বাবে আত্মবলিদান দিছিল।",
+                bhogeswari_p2: "তেওঁৰ কাহিনীয়ে প্ৰমাণ কৰে যে দেশপ্ৰেম আৰু অন্যায়ৰ বিৰুদ্ধে যুঁজ দিয়াৰ সাহস বয়সৰ ওপৰত নিৰ্ভৰশীল নহয়।",
+                bhogeswari_h1: "দেশৰ আহ্বান",
+                bhogeswari_p3: "১৮৮৫ চনত অসমৰ নগাঁও জিলাত জন্মগ্ৰহণ কৰা ভোগেশ্বৰী ফুকননী আছিল এগৰাকী সাধাৰণ গৃহিণী আৰু আঠটা সন্তানৰ মাতৃ। ঘৰুৱা জীৱনৰ মাজতো তেওঁৰ মনত দেশপ্ৰেমৰ ভাৱ গভীৰভাৱে শিপাই আছিল। মহাত্মা গান্ধীৰ স্বাৱলম্বন আৰু অসহযোগৰ আহ্বানত অনুপ্ৰাণিত হৈ তেওঁ আৰু তেওঁৰ পৰিয়াল স্বাধীনতা আন্দোলনত সক্ৰিয়ভাৱে অংশগ্ৰহণ কৰিছিল।",
+                bhogeswari_p4: "১৯৪২ চনৰ আগষ্টত যেতিয়া ভাৰত ত্যাগ আন্দোলন আৰম্ভ হৈছিল, ই সমগ্ৰ দেশতে ব্ৰিটিছক 'ভাৰত ত্যাগ' কৰাৰ দাবীৰে এক জুই জ্বলাই তুলিছিল। অসমত এই আন্দোলন বিশেষভাৱে তীব্ৰ আছিল। ব্ৰিটিছ চৰকাৰে কঠোৰ হাতেৰে ইয়াৰ দমন কৰিছিল।",
+                bhogeswari_p5: "নগাঁৱৰ বঢ়মপুৰ অঞ্চলত ভোগেশ্বৰী ফুকননীয়ে স্থাপন কৰাত সহায় কৰা স্থানীয় কংগ্ৰেছ কাৰ্যালয়টো ব্ৰিটিছ কৰ্তৃপক্ষই জব্দ কৰি তলা লগাই দিছিল। এই কাৰ্য্যক স্থানীয় ৰাইজৰ স্বাভিমান আৰু স্বাধীনতাৰ যুঁজৰ প্ৰতি পোনপটীয়া প্ৰত্যাহ্বান হিচাপে গণ্য কৰা হৈছিল।",
+                bhogeswari_h2: "বিদ্ৰোহৰ সেই নিৰ্ণায়ক দিনটো",
+                bhogeswari_p6: "১৯৪২ চনৰ ১৮ ছেপ্টেম্বৰত স্থানীয় ৰাইজে তেওঁলোকৰ কাৰ্যালয় পুনৰ উদ্ধাৰ কৰাৰ সিদ্ধান্ত লয়। বঢ়মপুৰ কংগ্ৰেছ কাৰ্যালয়লৈ গৈ তাক পুনৰ মুকলি কৰিবলৈ এক বিশাল, শান্তিপূৰ্ণ শোভাযাত্ৰাৰ আয়োজন কৰা হয়।",
+                bhogeswari_p7: "প্ৰায় ৬০ বছৰ বয়সীয়া ভোগেশ্বৰী ফুকননী এই শোভাযাত্ৰাৰ সন্মুখত আছিল। তেওঁ তেওঁৰ জীয়ৰী ৰত্নমালাৰ সৈতে হাতত ত্ৰিৰংগা লৈ 'বন্দে মাতৰম্' ধ্বনি দি আগবাঢ়ি গৈছিল।",
+                bhogeswari_p8: "শোভাযাত্ৰাটোক ব্ৰিটিছ বিষয়া কেপ্টেইন ফিনিছৰ নেতৃত্বত এটা বৃহৎ আৰক্ষী বাহিনীয়ে বাধা দিয়ে। বিষয়াজনে নিৰস্ত্ৰ জনতাক ছত্ৰভংগ যাবলৈ নিৰ্দেশ দিয়ে, কিন্তু তেওঁলোক নিজৰ স্থিতিত অটল থাকে।",
+                bhogeswari_p9: "জনতাৰ এই বিদ্ৰোহত ক্ষুব্ধ হৈ কেপ্টেইন ফিনিছে ৰত্নমালাৰ হাতৰ পৰা জাতীয় পতাকাখন কাঢ়ি নিবলৈ চেষ্টা কৰে। এই দৃশ্য দেখি ভোগেশ্বৰী ফুকননীয়ে নিজৰ খং সম্বৰণ কৰিব নোৱাৰিলে। তেওঁ নিজৰ পতাকাৰ দণ্ডডাল লৈ কেপ্টেইন ফিনিছৰ মূৰত আঘাত কৰে।",
+                bhogeswari_p10: "এগৰাকী বৃদ্ধ মহিলাৰ এই আক্ৰমণত স্তম্ভিত আৰু ক্ৰোধিত হৈ কেপ্টেইন ফিনিছে লগে লগে তেওঁৰ ৰিভলভাৰ উলিয়াই তেওঁক গুলীয়াই দিয়ে।",
+                bhogeswari_p11: "গুৰুতৰভাৱে আহত হৈ ভোগেশ্বৰী ফুকননী মাটিত ঢলি পৰে। দুদিন পিছত, ১৯৪২ চনৰ ২০ ছেপ্টেম্বৰত তেওঁ মৃত্যুবৰণ কৰে আৰু দেশৰ বাবে শ্বহীদ হয়।",
+                bhogeswari_h3: "এক চিৰস্থায়ী উত্তৰাধিকাৰ",
+                bhogeswari_p12: "ভোগেশ্বৰী ফুকননীৰ এই বলিদান অথলে যোৱা নাছিল। তেওঁৰ মৃত্যুৱে তেওঁক অসমৰ প্ৰতিৰোধ আৰু সাহসৰ এক শক্তিশালী প্ৰতীকত পৰিণত কৰিলে। তেওঁৰ এই কাৰ্য্যই আন হাজাৰ হাজাৰ লোকক ভাৰত ত্যাগ আন্দোলনত যোগদান কৰিবলৈ অনুপ্ৰাণিত কৰিছিল।",
+                bhogeswari_p13: "আজি ভোগেশ্বৰী ফুকননীক 'শ্বহীদ' হিচাপে সন্মান জনোৱা হয় আৰু অসমৰ অন্যতম শ্ৰেষ্ঠ স্বাধীনতা সংগ্ৰামী হিচাপে স্মৰণ কৰা হয়।",
+                bhogeswari_p14: "তেওঁৰ স্মৃতিত কেইবাটাও পদক্ষেপ লোৱা হৈছে:",
+                bhogeswari_list: "<li><strong>ভোগেশ্বৰী ফুকননী অসামৰিক চিকিৎসালয়:</strong> নগাঁৱৰ অসামৰিক চিকিৎসালয়খন তেওঁৰ নামেৰে নামাকৰণ কৰা হৈছে।</li><li><strong>ভোগেশ্বৰী ফুকননী ইনড'ৰ ষ্টেডিয়াম:</strong> গুৱাহাটীৰ এটা ইনড'ৰ ষ্টেডিয়াম তেওঁৰ স্মৃতিত উচৰ্গা কৰা হৈছে।</li><li><strong>Commemorative Stamps:</strong> India Post has released special covers honouring her as an \"Unsung Hero\" of the freedom struggle.</li>",
+                bhogeswari_p15: "শ্বহীদ ভোগেশ্বৰী ফুকননীৰ কাহিনী ভাৰতৰ ইতিহাসৰ এক গুৰুত্বপূৰ্ণ অধ্যায়। ই আমাক সোঁৱৰাই দিয়ে যে স্বাধীনতাৰ যুঁজখন সাধাৰণ মানুহেও অসাধাৰণ সাহস দেখুৱাই জয় কৰিছিল।",
+                bhogeswari_video_note: "অল ইণ্ডিয়া ৰেডিঅ'ৰ 'আজাদী কা চফৰ' শৃংখলাৰ এই ভিডিঅ'টোত ভোগেশ্বৰী ফুকননী আৰু অসমৰ অন্যান্য বীৰাংগনা মহিলা স্বাধীনতা সংগ্ৰামীসকললৈ শ্ৰদ্ধাঞ্জলি জ্ঞাপন কৰা হৈছে।",
+
+                // --- Kanaklata Bio Page Translations (Assamese) ---
+                kanaklata_title: "বীৰবালা কনকলতা বৰুৱা: ভাৰত ত্যাগ আন্দোলনৰ ১৭ বছৰীয়া শ্বহীদ",
+                kanaklata_p1: "ভাৰতৰ স্বাধীনতা সংগ্ৰামৰ ইতিহাসত এনে কিছুমান ত্যাগৰ কাহিনী আছে যিবোৰ কালজয়ী। অসমৰ এগৰাকী কমবয়সীয়া ছোৱালী কনকলতা বৰুৱাৰ কাহিনী, যিয়ে দেশপ্ৰেমৰ বাবে মৃত্যুকো কেৰেপ কৰা নাছিল, সঁচাকৈয়ে অতি শক্তিশালী আৰু অনুপ্ৰেৰণাদায়। যি বয়সত বেছিভাগ ল'ৰা-ছোৱালীয়ে পৃথিৱীখনক চিনিবলৈ আৰম্ভ কৰে, সেই বয়সতে তেওঁ দেশৰ বাবে সৰ্বোচ্চ বলিদান দিছিল আৰু 'বীৰবালা' হিচাপে নিজৰ নাম ইতিহাসত স্বৰ্ণিল আখৰেৰে লিপিবদ্ধ কৰিছিল।",
+                kanaklata_h1: "অসমত জ্বলি উঠা এক ফিৰিঙতি",
+                kanaklata_p2: "১৯২৪ চনৰ ২২ ডিচেম্বৰত অসমৰ দৰং জিলাৰ বৰঙাবাৰী গাঁৱত কনকলতা বৰুৱাৰ জন্ম হৈছিল। তেওঁৰ জীৱন আৰম্ভণিতেই দুখেৰে ভৰা আছিল; মাত্ৰ পাঁচ বছৰ বয়সতে তেওঁ মাতৃক হেৰুৱাইছিল আৰু তাৰ কিছুদিন পাছতে পিতৃৰ বিয়োগ ঘটিছিল। ফলত সৰু ভাই-ভনী কেইটাৰ দায়িত্ব তেওঁৰ কান্ধত পৰিছিল। এই দায়িত্ববোধেই পাছলৈ এক শক্তিশালী দেশপ্ৰেমৰ সংকল্পলৈ ৰূপান্তৰিত হৈছিল।",
+                kanaklata_p3: "১৯৪২ চনৰ ভিতৰত মহাত্মা গান্ধীৰ 'ভাৰত ত্যাগ আন্দোলন'-এ সমগ্ৰ দেশক উদ্বেলিত কৰি তুলিছিল। অসমৰ চহৰ আৰু গাঁওবোৰত, কনকলতাৰ জিলাখনকে ধৰি, 'কৰিম কিম্বা মৰিম' মন্ত্ৰটো গভীৰভাৱে প্ৰতিধ্বনিত হৈছিল। স্থানীয় কংগ্ৰেছ নেতাসকলৰ ভাষণৰ দ্বাৰা অনুপ্ৰাণিত হৈ, কম বয়স হোৱা সত্ত্বেও, তেওঁ স্বাধীনতা সংগ্ৰামত অংশগ্ৰহণ কৰিবলৈ দৃঢ়প্ৰতিজ্ঞ আছিল।",
+                kanaklata_p4: "তেওঁ 'মৃত্যু বাহিনী'ত যোগদান কৰিছিল - যিটো আছিল যুৱ স্বেচ্ছাসেৱকৰ এটা গোট, যাৰ উদ্দেশ্য আছিল দেশৰ সন্মান আৰু জাতীয় পতাকা ৰক্ষাৰ বাবে প্ৰয়োজন হ'লে প্ৰাণ ত্যাগ কৰা।",
+                kanaklata_h2: "সেই নিৰ্ণায়ক দিন: ২০ ছেপ্টেম্বৰ, ১৯৪২",
+                kanaklata_p5: "ব্ৰিটিছ শাসনৰ প্ৰতীক গহপুৰ আৰক্ষী থানাত ত্ৰিৰংগা পতাকা উত্তোলন কৰাৰ এক সাহসী পৰিকল্পনা কৰিছিল স্থানীয় কংগ্ৰেছ নেতাসকলে। ই আছিল ব্ৰিটিছ চৰকাৰৰ প্ৰতি এক পোনপটীয়া প্ৰত্যাহ্বান, যিয়ে জাতীয় পতাকা আৰু এনে শোভাযাত্ৰা নিষিদ্ধ কৰিছিল।",
+                kanaklata_p6: "১৯৪২ চনৰ ২০ ছেপ্টেম্বৰত এক বিশাল, নিৰস্ত্ৰ শোভাযাত্ৰাই দেশপ্ৰেমমূলক শ্লোগান দি থানাৰ ফালে আগবাঢ়িছিল। এই শোভাযাত্ৰাৰ সন্মুখত, মহিলা বাহিনীক অদম্য সাহসেৰে নেতৃত্ব দিছিল ১৭ বছৰীয়া কনকলতা বৰুৱাই, যাৰ হাতত আছিল এখন জাতীয় পতাকা।",
+                kanaklata_p7: "থানা পোৱাৰ লগে লগে তেওঁলোকক ভাৰপ্ৰাপ্ত বিষয়া ৰেৱতী মহান সোমৰ নেতৃত্বত এটা আৰক্ষী বাহিনীয়ে বাধা দিয়ে। বিষয়াজনে শোভাযাত্ৰা বন্ধ কৰিবলৈ সতৰ্ক কৰি দিয়ে আৰু আগবাঢ়ি গ'লে গুলীচালনা কৰাৰ ভাবুকি দিয়ে।",
+                kanaklata_p8: "কনকলতাৰ কণ্ঠ ভয়হীন আছিল। তেওঁ স্পষ্টকৈ কৈছিল যে তেওঁলোক নিৰস্ত্ৰ, তেওঁলোকৰ উদ্দেশ্য শান্তিপূৰ্ণ আৰু তেওঁলোক পিছহুঁহকি নাযায়। তেওঁ তাত নিজৰ কৰ্তব্য পালন কৰিবলৈ গৈছিল আৰু আৰক্ষীকো নিজৰ কৰ্তব্য পালন কৰিবলৈ কৈছিল।",
+                kanaklata_p9: "তেওঁ এখোজ আগবাঢ়ি যোৱাৰ লগে লগে আৰক্ষীয়ে গুলীচালনা কৰে।",
+                kanaklata_p10: "কনকলতাৰ বুকুত গুলী লাগে। তেওঁ মাটিত ঢলি পৰে, কিন্তু তেতিয়াও পতাকাখন জোৰকৈ ধৰি আছিল যাতে ই মাটিত নপৰে। পতাকাখন পৰিবলৈ ধৰা দেখি মৃত্যু বাহিনীৰ আন এজন যুৱ স্বেচ্ছাসেৱক মুকুন্দ কাকতিয়ে আগবাঢ়ি গৈ পতাকাখন ধৰে। তেওঁকো গুলীবিদ্ধ কৰি হত্যা কৰা হয়।",
+                kanaklata_p11: "এই নিৰ্মম অত্যাচাৰৰ পাছতো স্বেচ্ছাসেৱকসকলৰ মনোবল ভঙা নাছিল। অৱশেষত ৰামপতি ৰাজখোৱা নামৰ আন এজন ব্যক্তিয়ে থানাত পতাকা উত্তোলন কৰিবলৈ সক্ষম হয়, যাৰ বাবে কনকলতা আৰু মুকুন্দই প্ৰাণ দিছিল।",
+                kanaklata_h3: "সাহসৰ এক চিৰস্থায়ী উত্তৰাধিকাৰ",
+                kanaklata_p12: "মাত্ৰ ১৭ বছৰ বয়সতে কনকলতা বৰুৱাৰ আত্মবলিদানে সমগ্ৰ অঞ্চলটোত এক জোকাৰণি সৃষ্টি কৰিছিল আৰু তেওঁক নিভাজ সাহসৰ প্ৰতীক হিচাপে অমৰ কৰি তুলিছিল। তেওঁ কোনো প্ৰশিক্ষিত সৈনিক নাছিল, আছিল এগৰাকী সাধাৰণ গাঁৱৰ জীয়ৰী, যিয়ে সময়ত এনে সাহস দেখুৱাইছিল যিয়ে এক সাম্ৰাজ্যৰ শক্তিৰ ওচৰত মূৰ দোঁৱাবলৈ বাধ্য কৰাইছিল।",
+                kanaklata_p13: "তেওঁৰ ত্যাগ অসম আৰু ভাৰতৰ ইতিহাসৰ এক অন্যতম স্তম্ভ। আজি তেওঁৰ স্মৃতিক বিভিন্ন ধৰণে সন্মান জনোৱা হয়:",
+                kanaklata_list: "<li><strong>ICGS কনকলতা বৰুৱা:</strong> ভাৰতীয় উপকূলৰক্ষী বাহিনীয়ে ২০২০ চনত তেওঁৰ নামেৰে এখন দ্ৰুত টহলদাৰী জাহাজ (Fast Patrol Vessel) মুকলি কৰে, যিয়ে সাগৰৰ বুকুত তেওঁৰ সাহসৰ কাহিনী কঢ়িয়াই লৈ ফুৰে।</li><li><strong>প্ৰতিমূৰ্তি আৰু স্মাৰক:</strong> গহপুৰত তেওঁৰ আত্মবলিদানৰ স্থানত এটা পূৰ্ণাবয়ব প্ৰতিমূৰ্তি আৰু তেজপুৰৰ কনকলতা উদ্যান তেওঁৰ ত্যাগৰ চিৰস্থায়ী স্মাৰক।</li><li><strong>বীৰবালা উপাধি:</strong> 'বীৰবালা' উপাধিটো এতিয়া তেওঁৰ নামৰ সমাৰ্থক হৈ পৰিছে, যিটো তেওঁ নিজৰ তেজেৰে অৰ্জন কৰিছিল।</li>",
+                kanaklata_p14: "কনকলতা বৰুৱাৰ কাহিনীয়ে আমাক সোঁৱৰাই দিয়ে যে স্বাধীনতাৰ যুদ্ধ কেৱল ডাঙৰ চহৰৰ বিখ্যাত নেতাসকলেই কৰা নাছিল, বৰঞ্চ সৰু গাঁৱৰ কিশোৰ-কিশোৰীসকলেও কৰিছিল, যাৰ দেশপ্ৰেম আছিল অটল আৰু সাহস আছিল অসীম।"
+            },
+            en: { // English
+                title: "Raising Strong Daughters | A Project on Gender Awareness",
+                nav_title: "Raising Strong Daughters",
+                marquee_welcome: "Welcome to the \"Raising Strong Daughters\" website.",
+                marquee_welcome_en: "Welcome to the \"Raising Strong Daughters\" website.",
+                nav_home: "Home",
+                nav_about: "About",
+                nav_learning: "Learning",
+                nav_stories: "Stories",
+                nav_resources: "Resources",
+                nav_interactive: "Interactive",
+                nav_translate: "Translate",
+                hero_title: "Empowering Her, Transforming Assam",
+                hero_subtitle: "Join the movement for a brighter, equal future. Through shared stories, knowledge, and community, we are building a digital space where every woman and girl in Assam can thrive.",
+                hero_cta: "Get Started",
+                mission_title: "Our Mission",
+                mission_text: "Raising Strong Daughters is a heartfelt initiative dedicated to illuminating the path for women and girls across Assam. We are building a digital sanctuary where knowledge meets inspiration—offering vital resources on rights and health alongside powerful stories from our own communities. By connecting voices from the tea gardens to the tech hubs, we strive to break silences and build bridges of support. Our mission is simple yet profound: to foster a society where gender equity is the norm, and every girl has the tools to write her own destiny. Together, let's turn awareness into action and create a future brimming with hope, dignity, and limitless potential for all.",
+                about_title: "My Inspiration",
+                about_prof_intro: "This project is deeply personal to me, born out of the profound influence of my mentor, Professor Rituparna Patgiri from the Department of Humanities and Social Sciences at IIT Guwahati. Her pioneering research on 'gender, media, and digital society' has been more than just academic reference material; it has been a lens through which I now view the world.",
+                about_prof_focus: "\"Working under her guidance, I began to understand that technology is not merely about code or connectivity—it is a vital space for sociological transformation. Professor Patgiri’s insights revealed to me how digital platforms can serve as powerful engines for social change. It was her work that sparked the realization that a website could be more than information; it could be a tool for empowerment and a bridge for gender awareness in Assam.\"",
+                about_prof_conclusion: "This project stands as a testament to her mentorship, which taught me to look beyond the technicalities of engineering and see the human stories behind the screen. Her dedication to understanding the nuances of gender in our digital age has inspired me to build 'Raising Strong Daughters' not just as a requirement, but as a sincere effort to contribute to the equitable society she envisions.",
+                about_collab_title: "Our Collaborations & Alignments",
+                about_collab_intro: "We align with the missions of several active regional organizations working for gender equity and social inclusion in Assam:",
+                ngo1_name: "Akam Foundation",
+                ngo1_desc: "A leading organization focusing on youth empowerment and community development, aligning with our goals for gender awareness.",
+                ngo2_name: "Rural Women Upliftment Association (RWUAANGO)",
+                ngo2_desc: "Dedicated to uplifting rural women, their work in livelihood and health directly supports our mission.",
+                ngo3_name: "Women’s Development Centre, Guwahati",
+                ngo3_desc: "A key resource center providing support and counseling, enhancing our network for women's safety and development.",
+                learning_title: "Learning & Awareness Portal",
+                learn1_title_as: "লিংগ অধিকাৰ আৰু সমতা",
+                learn1_title_en: "Gender Rights and Equality",
+                learn1_content: "Gender equality is not just a women's issue; it ensures that both men and women have equal opportunities, rights, and responsibilities. Articles 14, 15, and 21 of the Indian Constitution guarantee the right to equality and dignity. In this module, we discuss these rights and their application in daily life.",
+                learn2_title_as: "ছোৱালীৰ স্বাস্থ্য, পৰিচ্ছন্নতা আৰু শিক্ষা",
+                learn2_title_en: "Health, Hygiene, and Education for Girls",
+                learn2_content: "An educated and healthy girl is the foundation of a healthy society. This module covers the importance of menstrual hygiene, nutrition, and mental health. We also provide information on how education empowers girls to become self-reliant.",
+                learn3_title_as: "মিডিয়া, কলা, আৰু উদ্যোগ",
+                learn3_title_en: "Women in Media, Arts, and Entrepreneurship",
+                learn3_content: "Media and arts shape societal perceptions. In this section, we explore the contributions of Assamese women in art, literature, and media. We also celebrate women entrepreneurs and the opportunities available for them.",
+                learn4_title_as: "অসমৰ মহিলা স্বাধীনতা সংগ্ৰামী",
+                learn4_title_en: "Female Freedom Fighters of Assam",
+                fighter1_name: "Kanaklata Barua",
+                fighter1_desc: "Known as 'Birbala', she was an Assamese freedom fighter who led the 'Mrityu Bahini' (a death squad) during the Quit India Movement. She was martyred at the age of 17 while trying to hoist the Indian flag at the Gohpur police station.",
+                fighter2_name: "Bhogeswari Phukanani",
+                fighter2_desc: "A prominent figure in the Quit India Movement from Nagaon, Assam. She was shot and killed by the British police at the age of 60 while trying to protect the dignity of the Indian flag during a procession.",
+                fighter3_name: "Chandraprabha Saikiani",
+                fighter3_desc: "A fiery social reformer, writer, and freedom fighter. She was the founder of the All Assam Pradeshik Mahila Samiti and a leader in the non-cooperation movement, fighting against caste discrimination and for women's rights.",
+                fighter4_name: "Pushpalata Das",
+                fighter4_desc: "A Gandhian freedom fighter, social worker, and parliamentarian. She was a leader of the 'Mrityu Bahini' and was imprisoned during the Quit India Movement. She later became a Rajya Sabha member, continuing her social work.",
+                fighter5_name: "Nalinibala Devi",
+                fighter5_desc: "A noted Assamese poet and writer, she was also actively involved in the freedom movement. Through her patriotic poems and writings, she inspired many to join the non-cooperation movement and fight for independence.",
+                stories_title: "Stories & Voices",
+                stories_intro: "Stories of strength and initiative from women across Assam's communities. Send us your story!",
+                story1_title: "Transforming the Village",
+                story1_desc: "How a woman from Sivasagar started a Self-Help Group (SHG) and empowered the women in her village.",
+                story2_title: "Local Stories",
+                story2_desc: "About women, their lives, and what they are facing.",
+                story3_title: "Share Your Story Here",
+                story3_desc: "Go to the 'Interactive' section below to share your experience with us.",
+                resources_title: "Resources & Support",
+                resources_helplines_title: "Emergency Helplines",
+                helpline1_name: "Women Helpline:",
+                helpline2_name: "Child Helpline:",
+                helpline3_name: "Police:",
+                resources_guides_title: "Downloadable Guides (Assamese)",
+                guide1: "Guide to Government Schemes",
+                guide2: "Enrolling for Girl's Education",
+                resources_ngo_title: "Local Support Groups & NGOs",
+                resources_ngo_desc: "In addition to our aligned organizations on the 'About' page, connect with local Self-Help Groups (SHGs) and NGOs in your area.",
+                resources_ngo_link: "Learn about our collaborators & Alignments &rarr;",
+                interactive_title: "Interactive & Feedback",
+                quiz_title: "Awareness Quiz",
+                quiz_q1: "Q1: What is the Women Helpline number in India?",
+                quiz_q2: "Q2: Which article ensures Right to Equality?",
+                quiz_submit: "Submit",
+                quiz_correct: "Correct! You are aware.",
+                quiz_incorrect: "Incorrect. The correct answers are 181 and Article 14. Keep learning!",
+                feedback_title: "Share Feedback or a Story",
+                feedback_intro: "Send us your feedback, questions, or your own story of empowerment.",
+                form_name: "Name",
+                form_email: "Email (Optional)",
+                form_message: "Message / Story",
+                form_submit: "Submit Feedback",
+                form_success: "Thank you! Your feedback has been received.",
+                footer_project_title: "B.Tech Project",
+                footer_project_desc: "Digital Platforms for Gender Awareness in Assam",
+                footer_guide_title: "Under the guidance of",
+                footer_guide_name: "Professor Rituparna Patgiri",
+                footer_guide_dept: "Dept. of Humanities and Social Sciences, IIT Guwahati",
+                footer_developer_title: "Created By",
+                footer_developer_name: "Neha Nayan",
+                footer_developer_roll: "Roll No: 220122038",
+                footer_developer_dept: "B.Tech, Chemical Science and Technology Dept.",
+                footer_website_title: "Website",
+                footer_website_name: "Raising Strong Daughters",
+
+                // --- Bhogeswari Bio Page Translations ---
+                back_home: "Back to Home",
+                back_stories: "Back to Stories",
+                interviews_title: "Local Voices: Interviews from IIT Guwahati",
+                interviews_intro: "We spoke with women working and studying on campus to understand their experiences, challenges, and hopes for a more inclusive future.",
+                q_challenge: "Q: Challenges?",
+                q_rights: "Q: Awareness of Rights?",
+                q_digital: "Q: Use of Digital Platforms?",
+                q_rolemodel: "Q: Role Model?",
+                q_needs: "Q: Needed Help?",
+                
+                // English Translations for Staff Interviews
+                int1_a1: "My work starts early and ends late. At home, I have to manage everything. Sometimes, people don’t respect my work just because I’m a woman.",
+                int1_a2: "I know a little from senior ladies and the union.",
+                int1_a3: "I use a mobile for calls and WhatsApp. I'd try an online platform if it was in Assamese.",
+                int1_a4: "My mother, who raised us alone by working in fields.",
+                int1_a5: "Info on health, savings, and where to go for trouble. Simple audio/video messages would be best.",
+                
+                int2_a1: "Hard work isn't valued, rude comments from men, and full duty at home.",
+                int2_a2: "I only know about getting paid on time, not much about safety or leave.",
+                int2_a3: "Language is a problem. An Assamese help website would be better.",
+                int2_a4: "A madam in the hostel who listens, helps, and stands up for what's right.",
+                int2_a5: "Direct helpline numbers in our language and someone to listen to our problems.",
+
+                int3_a1: "Juggling work and home, and being spoken down to for being a cleaner.",
+                int3_a2: "I learn from friends, but wish there was one place for all information.",
+                int3_a3: "I have a phone, but prefer videos over reading.",
+                int3_a4: "A girl from my village who became a teacher, proving we can do anything.",
+                int3_a5: "Simple explanations of legal rights, success stories of other women, and self-help ways.",
+
+                int4_a1: "Fear of health issues, lack of time for self, and being talked down to.",
+                int4_a2: "Mostly gossip or friends; rarely official information.",
+                int4_a3: "No, English is difficult. Assamese would be helpful.",
+                int4_a4: "My elder sister who went back to school after marriage to earn for the family.",
+                int4_a5: "Direct contacts and easy ways to talk about problems anonymously.",
+
+                int5_a1: "Low salary, not being taken seriously, and managing kids with work.",
+                int5_a2: "Mostly from other workers during breaks.",
+                int5_a3: "I would love to use one if it's easy and in Assamese.",
+                int5_a4: "My aunt who started a small shop after her husband left; she is brave and independent.",
+                int5_a5: "A website explaining basic rights, health, with support contacts and more stories from women like us.",
+
+                // English Translations for Student Interviews
+                stu1_a1: "Unspoken barriers in technical groups; late nights can feel intimidating.",
+                stu1_a2: "Mostly through word of mouth or WhatsApp; not everyone checks official sites.",
+                stu1_a3: "Yes, Instagram and Telegram for women in STEM. Campus info in one place would help.",
+                stu1_a4: "Elder cousin in AI research, showing confidence in male-dominated fields.",
+                stu1_a5: "Open forums, stronger mentorship, and an Assamese-language platform.",
+
+                stu2_a1: "Subtle gender bias in group projects or lab work.",
+                stu2_a2: "Know about ICC/WDC, but activities aren't always well-publicized.",
+                stu2_a3: "Blogs, YouTube for success stories, and Quora for queries.",
+                stu2_a4: "School teacher who set up a girls' science club and broke stereotypes.",
+                stu2_a5: "Anonymous chat, up-to-date event info, and personal stories in Assamese/English.",
+
+                stu3_a1: "Stereotypical remarks; women sometimes not expected to lead research teams.",
+                stu3_a2: "Orientation sessions help, but regular reminders would be better.",
+                stu3_a3: "LinkedIn, email newsletters, and academic mailing lists for gender in science.",
+                stu3_a4: "Dr. Tessy Thomas, proving leadership is about skill, not gender.",
+                stu3_a5: "Give space to lesser-heard voices (Northeast communities, support staff) in local languages.",
+
+                stu4_a1: "Ideas in groups taken less seriously; poor representation in tech clubs.",
+                stu4_a2: "Aware, but scope for better visibility; notices often missed.",
+                stu4_a3: "Follows women designers on Instagram/YouTube for inspiration.",
+                stu4_a4: "Mother, who started studying again after marriage and now teaches.",
+                stu4_a5: "Resources in Assamese/Hindi, campus design stories, and easy anonymous reporting.",
+
+
+                bhogeswari_title: "Shaheed Bhogeswari Phukanani: The Lioness of Assam's 1942 Quit India Movement",
+                bhogeswari_p1: "In the grand saga of India's freedom struggle, the names of prominent leaders are well-known. However, the foundation of this independence was built on the sacrifices of countless unsung heroes—ordinary men and women who displayed extraordinary courage. Among these revered figures is <strong>Shaheed Bhogeswari Phukanani</strong>, a braveheart from Assam who, at over 60 years of age, laid down her life for the nation's honour.",
+                bhogeswari_p2: "Her story is a powerful testament to the fact that patriotism and the courage to fight oppression are not bound by age.",
+                bhogeswari_h1: "The Call of a Nation",
+                bhogeswari_p3: "Born in 1885 in the Nagaon district of Assam, Bhogeswari Phukanani was a simple housewife and a mother to eight children. Despite her domestic life, she was deeply imbued with the spirit of nationalism. She and her family were active participants in the freedom movement, inspired by Mahatma Gandhi's call for self-reliance and non-cooperation.",
+                bhogeswari_p4: "When the Quit India Movement was launched in August 1942, it ignited a fire across the nation, demanding the British \"Quit India.\" In Assam, the movement was particularly intense. The British Raj responded with brutal force, banning the Indian National Congress, seizing its offices, and arresting its leaders.",
+                bhogeswari_p5: "In the Berhampur area of Nagaon, the local Congress office, which Bhogeswari Phukanani had helped establish, was seized and locked by the British authorities. This act was seen as a direct challenge to the local people's pride and their fight for freedom.",
+                bhogeswari_h2: "The Fateful Day of Defiance",
+                bhogeswari_p6: "On September 18, 1942, the local community decided to reclaim their office. A massive, peaceful procession was organized to march to the Berhampur Congress office and re-open it.",
+                bhogeswari_p7: "Bhogeswari Phukanani, then around 60 years old, was at the forefront of this procession. She, along with her daughter Ratnamala, led the crowd, holding the Tiranga (the Indian tricolour flag) high and chanting slogans of \"Vande Mataram.\"",
+                bhogeswari_p8: "The procession was soon confronted by a large police force led by a British officer, Captain Finish (also referred to as Finch in some accounts). The officer ordered the unarmed crowd to disperse, but they stood their ground.",
+                bhogeswari_p9: "Enraged by the crowd's defiance, Captain Finish attempted to snatch the national flag from Ratnamala's hands, disrespecting the symbol of their struggle. Seeing this, Bhogeswari Phukanani could not contain her anger. In a powerful, instinctive act of defiance, she took the pole of her own flag and struck Captain Finish on the head.",
+                bhogeswari_p10: "Stunned and infuriated by the counter-attack from an elderly woman, Captain Finish immediately pulled out his revolver and shot her at point-blank range.",
+                bhogeswari_p11: "Grievously wounded, Bhogeswari Phukanani fell to the ground. She succumbed to her injuries two days later, on September 20, 1942, achieving martyrdom for the cause of India's independence.",
+                bhogeswari_h3: "A Legacy That Endures",
+                bhogeswari_p12: "The sacrifice of Bhogeswari Phukanani did not go in vain. Her martyrdom turned her into a powerful symbol of resistance and courage across Assam. Her act of defending the national flag with her life inspired thousands more to join the Quit India Movement, further strengthening the resolve to oust the British.",
+                bhogeswari_p13: "Today, Bhogeswari Phukanani is revered as \"Shaheed\" (Martyr) and celebrated as one of Assam's greatest freedom fighters.",
+                bhogeswari_p14: "Her legacy is formally remembered in several ways:",
+                bhogeswari_list: "<li><strong>Bhogeswari Phukanani Civil Hospital:</strong> The civil hospital in Nagaon is named in her honour.</li><li><strong>Bhogeswari Phukanani Indoor Stadium:</strong> An indoor stadium in Guwahati is also dedicated to her memory.</li><li><strong>Commemorative Stamps:</strong> India Post has released special covers honouring her as an \"Unsung Hero\" of the freedom struggle.</li>",
+                bhogeswari_p15: "Shaheed Bhogeswari Phukanani's story is a vital chapter in India's history. It serves as a profound reminder that the fight for freedom was won by ordinary people who, when the moment came, showed extraordinary courage and were willing to make the ultimate sacrifice for their motherland.",
+                bhogeswari_video_note: "This video from All India Radio's 'Azadi ka Safar' series pays tribute to Bhogeswari Phukanani and other valiant women freedom fighters from Assam.",
+
+                // --- Kanaklata Bio Page Translations ---
+                kanaklata_title: "Birbala Kanaklata Barua: The 17-Year-Old Martyr of the Quit India Movement",
+                kanaklata_p1: "In the annals of India's freedom struggle, there are stories of sacrifice so profound they transcend time. The story of <strong>Kanaklata Barua</strong>, a young girl from Assam who stared death in the face for the love of her nation, is one of the most powerful and inspiring. At an age when most are just beginning to discover the world, she made the ultimate sacrifice, cementing her legacy as \"Birbala\" (Brave Girl) and a true martyr.",
+                kanaklata_h1: "A Spark Ignited in Assam",
+                kanaklata_p2: "Kanaklata Barua was born on December 22, 1924, in the village of Barangabari, in the Darrang district of Assam. Her life was marked by early tragedy; she lost her mother at the age of five and her father soon after, leaving her to care for her younger siblings. This fostered a deep sense of responsibility that would soon transform into a powerful patriotic resolve.",
+                kanaklata_p3: "By 1942, Mahatma Gandhi's call for the Quit India Movement had electrified the nation. The mantra of \"Do or Die\" resonated deeply in the towns and villages of Assam, including in Kanaklata's district. She was inspired by the speeches of local Congress leaders and, despite her young age, was determined to play her part.",
+                kanaklata_p4: "She joined the <em>Mrityu Bahini</em> (Death Squad), a group of youth volunteers formed with the express purpose of sacrificing their lives, if necessary, to uphold the honour of the nation and its flag.",
+                kanaklata_h2: "The Fateful Day: September 20, 1942",
+                kanaklata_p5: "The local Congress leaders planned a bold act of defiance: to hoist the Tiranga (Indian tricolour flag) at the Gohpur Police Station, a symbol of British authority. This was a direct challenge to the colonial government, which had banned the flag and any such processions.",
+                kanaklata_p6: "On September 20, 1942, a large, unarmed procession marched towards the police station, chanting patriotic slogans. At its head, leading the women's contingent with unwavering determination, was 17-year-old Kanaklata Barua, holding the national flag high.",
+                kanaklata_p7: "As they reached the station, they were confronted by a police force led by the officer-in-charge, Rebati Mahan Som. He warned the procession to halt, threatening to open fire if they advanced.",
+                kanaklata_p8: "Kanaklata's voice rang out, undeterred. She declared that they were unarmed, their intentions were peaceful, and they would not retreat. She was there to do her duty and he could do his.",
+                kanaklata_p9: "As she stepped forward, the police fired.",
+                kanaklata_p10: "Kanaklata was shot in the chest. She fell to the ground, still clutching the flag, which she tried to keep from falling. As the flag began to dip, another young volunteer from the Mrityu Bahini, Mukunda Kakoti, rushed forward to take it from her. He, too, was shot and killed.",
+                kanaklata_p11: "Despite the brutal crackdown, the spirit of the volunteers was not broken. Another person, Rampati Rajkhowa, eventually managed to hoist the flag at the police station, fulfilling the mission for which Kanaklata and Mukunda had laid down their lives.",
+                kanaklata_h3: "A Legacy Cast in Courage",
+                kanaklata_p12: "Kanaklata Barua's martyrdom at the tender age of 17 sent shockwaves through the region and immortalized her as a symbol of pure, unyielding courage. She was not a trained soldier but an ordinary village girl who, when the moment came, displayed a bravery that humbled the might of an empire.",
+                kanaklata_p13: "Her sacrifice remains a cornerstone of Assamese and Indian history. Today, her legacy is honoured in numerous ways:",
+                kanaklata_list: "<li><strong>ICGS Kanaklata Barua:</strong> The Indian Coast Guard commissioned a Fast Patrol Vessel in her name in 2020, carrying her story of bravery onto the high seas.</li><li><strong>Statues and Memorials:</strong> A life-size statue of her at Gohpur, the site of her martyrdom, and the Kanaklata Udyan, a park in Tezpur, serve as constant reminders of her sacrifice.</li><li><strong>Birbala Title:</strong> The title \"Birbala\" is now synonymous with her name, a title she earned with her blood.</li>",
+                kanaklata_p14: "The story of Kanaklata Barua is a powerful reminder that the fight for freedom was not just waged by prominent leaders in distant cities, but also by teenagers in small villages, whose love for their country was absolute and whose courage knew no bounds."
+            }
+        };
+
+        // --- 2. STATE MANAGEMENT ---
+        let currentLang = 'as'; // Default language
+        const htmlElement = document.documentElement;
+        const langToggleBtn = document.getElementById('lang-toggle-btn');
+
+        // --- 3. FUNCTIONS ---
+
+        // Function to switch visible section
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            // Show targeted section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('nav-link-active');
+                if (link.getAttribute('href') === '#' + sectionId) {
+                    link.classList.add('nav-link-active');
+                }
+            });
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Function to update language across the site
+        function updateLanguage() {
+            // 1. Set the <html> tag's lang attribute
+            htmlElement.setAttribute('lang', currentLang);
+
+            // 2. Update all elements with a data-lang-key
+            const elementsToTranslate = document.querySelectorAll('[data-lang-key]');
+            elementsToTranslate.forEach(el => {
+                const key = el.dataset.langKey;
+                if (translations[currentLang][key]) {
+                    // Check if it's a list for special handling (contains HTML)
+                    if (key === 'bhogeswari_list' || key === 'kanaklata_list' || key.includes('_p1') || key === 'bhogeswari_p1' || key === 'kanaklata_p1') { // Expanded check for HTML content keys
+                         el.innerHTML = translations[currentLang][key];
+                    } else {
+                        el.textContent = translations[currentLang][key];
+                    }
+                }
+            });
+        }
+
+        // --- 4. EVENT LISTENERS ---
+
+        // Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const sectionId = href.substring(1);
+                    showSection(sectionId);
+                }
+            });
+        });
+
+        // Language Toggle Button
+        if (langToggleBtn) {
+            langToggleBtn.addEventListener('click', () => {
+                currentLang = currentLang === 'as' ? 'en' : 'as';
+                updateLanguage();
+            });
+        }
+
+        // Accordion Toggles
+        document.querySelectorAll('.accordion-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('.transform');
+                
+                // Toggle current accordion
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.classList.remove('rotate-45');
+                } else {
+                    // Optional: Close others
+                     document.querySelectorAll('.accordion-content').forEach(otherContent => {
+                         otherContent.style.maxHeight = null;
+                     });
+                     document.querySelectorAll('.accordion-toggle .transform').forEach(otherIcon => {
+                         otherIcon.classList.remove('rotate-45');
+                     });
+
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.classList.add('rotate-45');
+                }
+            });
+        });
+
+        // Quiz Form Submission
+        const quizForm = document.getElementById('quiz-form');
+        const quizResult = document.getElementById('quiz-result');
+        if (quizForm) {
+            quizForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(quizForm);
+                const q1 = formData.get('q1');
+                const q2 = formData.get('q2');
+                
+                let isCorrect = (q1 === '181' && q2 === 'Article 14');
+                
+                quizResult.classList.remove('hidden');
+                if (isCorrect) {
+                    quizResult.textContent = translations[currentLang]['quiz_correct'];
+                    quizResult.className = "mt-4 font-medium text-green-600";
+                } else {
+                    quizResult.textContent = translations[currentLang]['quiz_incorrect'];
+                    quizResult.className = "mt-4 font-medium text-red-600";
+                }
+            });
+        }
+
+        // Feedback Form Submission (Dummy)
+        const feedbackForm = document.getElementById('feedback-form');
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert(translations[currentLang]['form_success']);
+                feedbackForm.reset();
+            });
+        }
+
+        // --- 5. INITIALIZATION ---
+        function initializeApp() {
+            // 7. Initial Page Load
+            // Show the 'home' section and apply the default 'as' (Assamese) language
+            showSection('home');
+            updateLanguage();
+
+            // --- NEW EVENT LISTENERS FOR BIO PAGES ---
+            const bhogeswariBtn = document.getElementById('btn-bhogeswari');
+            const kanaklataBtn = document.getElementById('btn-kanaklata');
+            const localStoriesBtn = document.getElementById('btn-local-stories');
+            // Use a class to handle all back buttons easily
+            const backHomeBtns = document.querySelectorAll('.back-to-home-btn');
+            const backStoriesBtns = document.querySelectorAll('.back-to-stories-btn');
+
+            if (bhogeswariBtn) {
+                bhogeswariBtn.addEventListener('click', () => {
+                    showSection('bhogeswari-bio');
+                });
+            }
+
+            if (kanaklataBtn) {
+                kanaklataBtn.addEventListener('click', () => {
+                    showSection('kanaklata-bio');
+                });
+            }
+
+            if (localStoriesBtn) {
+                localStoriesBtn.addEventListener('click', () => {
+                    showSection('local-stories-page');
+                });
+            }
+
+            backHomeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showSection('home');
+                });
+            });
+
+            backStoriesBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showSection('stories');
+                });
+            });
+        }
+
+        // --- 6. RUN THE APP ---
+        // Wait for the DOM to be fully loaded before running the setup
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+    </script>
+
+</body>
+</html>
